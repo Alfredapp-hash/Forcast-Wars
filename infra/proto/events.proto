@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package arkhe.events.v1;
+
+option go_package = "github.com/arkhe/agentos/gen/events/v1";
+
+// Mirrors @arkhe/contracts TypeScript schema for gRPC transport.
+
+message TraceContext {
+  string trace_id = 1;
+  string span_id = 2;
+  optional string parent_span_id = 3;
+}
+
+message ResourceSnapshot {
+  optional double cpu_pct = 1;
+  optional double mem_mb = 2;
+  optional double net_tx_kb = 3;
+  optional double net_rx_kb = 4;
+}
+
+message CostSnapshot {
+  optional int32 input_tokens = 1;
+  optional int32 output_tokens = 2;
+  optional double cost_usd = 3;
+  optional string model = 4;
+}
+
+message EventEnvelope {
+  string id = 1;
+  string ts = 2;
+  string schema_version = 3;
+  optional string mission_id = 4;
+  optional string workspace_id = 5;
+  optional string agent_id = 6;
+  optional string parent_agent_id = 7;
+  optional TraceContext trace = 8;
+  optional ResourceSnapshot resources = 9;
+  optional CostSnapshot cost = 10;
+  string event_type = 11;
+  bytes payload_json = 12;
+}
+
+message EventStreamMessage {
+  string topic = 1;
+  EventEnvelope event = 2;
+  string emitted_at = 3;
+  string source = 4;
+}
+
+message PublishEventRequest {
+  EventEnvelope event = 1;
+  string source = 2;
+}
+
+message PublishEventResponse {
+  bool accepted = 1;
+}
+
+message SubscribeEventsRequest {
+  repeated string topic_filters = 1;
+  optional string mission_id = 2;
+}
+
+service EventService {
+  rpc Publish(PublishEventRequest) returns (PublishEventResponse);
+  rpc Subscribe(SubscribeEventsRequest) returns (stream EventStreamMessage);
+}

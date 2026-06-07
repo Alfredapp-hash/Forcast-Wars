@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+*.tsbuildinfo
+.turbo/
+
+# macOS
+.DS_Store
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Runtime / local data
+.data/
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.idea/
+*.swp
+
+# Python workers
+__pycache__/
+.venv/
+*.pyc
+
+# Secrets
+*.pem
+*.key
+credentials.json

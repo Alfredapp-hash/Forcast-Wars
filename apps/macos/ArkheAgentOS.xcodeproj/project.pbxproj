@@ -1,0 +1,386 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */; };
+		47670BBAB3221F8DF9A9465F /* MissionControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */; };
+		51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE0555F89845483D37F1E1D /* EventModels.swift */; };
+		599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6B216F4F94C6F50A360D6 /* AppState.swift */; };
+		7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3034B8EAEAD5958B6102C75A /* MainWindowView.swift */; };
+		A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74921248F80804EAC47F7EF5 /* VoiceBar.swift */; };
+		C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */; };
+		F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */; };
+		FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3034B8EAEAD5958B6102C75A /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
+		48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheAgentOSApp.swift; sourceTree = "<group>"; };
+		70624744DB8C4DDFA8457D31 /* ArkheAgentOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ArkheAgentOS.entitlements; sourceTree = "<group>"; };
+		74921248F80804EAC47F7EF5 /* VoiceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceBar.swift; sourceTree = "<group>"; };
+		803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArkheAgentOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89A6B216F4F94C6F50A360D6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlViewModel.swift; sourceTree = "<group>"; };
+		BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonClient.swift; sourceTree = "<group>"; };
+		CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlView.swift; sourceTree = "<group>"; };
+		CDE0555F89845483D37F1E1D /* EventModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModels.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		012C07DCE7109F4EEBFDC633 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				BBE73B73781966A5525F4D10 /* Components */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		0A96D2A6F2E2F1B6953920B8 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				E66494229B504D70A6354FE0 /* MissionControl */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		266A1B180E2EF36412DBD29C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				89A6B216F4F94C6F50A360D6 /* AppState.swift */,
+				3034B8EAEAD5958B6102C75A /* MainWindowView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4CD7A3F7803D7505EAC7D8D3 = {
+			isa = PBXGroup;
+			children = (
+				D80B52AF6438A8C1E261C5EF /* ArkheAgentOS */,
+				D12EC4470064778F8AE267F6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A9A43BD00FF213D841174641 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AC3923414260F87C3FA745D7 /* IPC */,
+				BEA0078F35BBB6F4A547595F /* Models */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AC3923414260F87C3FA745D7 /* IPC */ = {
+			isa = PBXGroup;
+			children = (
+				BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */,
+			);
+			path = IPC;
+			sourceTree = "<group>";
+		};
+		BBE73B73781966A5525F4D10 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */,
+				74921248F80804EAC47F7EF5 /* VoiceBar.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		BEA0078F35BBB6F4A547595F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CDE0555F89845483D37F1E1D /* EventModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D12EC4470064778F8AE267F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D80B52AF6438A8C1E261C5EF /* ArkheAgentOS */ = {
+			isa = PBXGroup;
+			children = (
+				70624744DB8C4DDFA8457D31 /* ArkheAgentOS.entitlements */,
+				48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */,
+				266A1B180E2EF36412DBD29C /* App */,
+				A9A43BD00FF213D841174641 /* Core */,
+				0A96D2A6F2E2F1B6953920B8 /* Features */,
+				012C07DCE7109F4EEBFDC633 /* Shared */,
+			);
+			path = ArkheAgentOS;
+			sourceTree = "<group>";
+		};
+		E66494229B504D70A6354FE0 /* MissionControl */ = {
+			isa = PBXGroup;
+			children = (
+				CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */,
+				A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */,
+			);
+			path = MissionControl;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1AF938F7F575C790FB78D804 /* ArkheAgentOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92B919F10D7C756E5A04781B /* Build configuration list for PBXNativeTarget "ArkheAgentOS" */;
+			buildPhases = (
+				2CB9BE7B072AE6507446E08F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ArkheAgentOS;
+			packageProductDependencies = (
+			);
+			productName = ArkheAgentOS;
+			productReference = 8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1ED557A4B6A43034B45DC97F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 44FD7F6DCA082E0D741625E7 /* Build configuration list for PBXProject "ArkheAgentOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4CD7A3F7803D7505EAC7D8D3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D12EC4470064778F8AE267F6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1AF938F7F575C790FB78D804 /* ArkheAgentOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2CB9BE7B072AE6507446E08F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */,
+				FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */,
+				301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */,
+				51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */,
+				7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */,
+				F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */,
+				47670BBAB3221F8DF9A9465F /* MissionControlViewModel.swift in Sources */,
+				C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */,
+				A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D885EA031B590937FDD4987 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ArkheAgentOS/ArkheAgentOS.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Arkhe AgentOS uses the microphone for voice-first mission control.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.arkhe.agentos;
+				PRODUCT_NAME = "Arkhe AgentOS";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		240E7CE02081E8906783B833 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		49FF7D832727E2D8F304BCCB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		8FCE5ABDE1020F5D7F4E8A94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ArkheAgentOS/ArkheAgentOS.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Arkhe AgentOS uses the microphone for voice-first mission control.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.arkhe.agentos;
+				PRODUCT_NAME = "Arkhe AgentOS";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		44FD7F6DCA082E0D741625E7 /* Build configuration list for PBXProject "ArkheAgentOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				240E7CE02081E8906783B833 /* Debug */,
+				49FF7D832727E2D8F304BCCB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92B919F10D7C756E5A04781B /* Build configuration list for PBXNativeTarget "ArkheAgentOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D885EA031B590937FDD4987 /* Debug */,
+				8FCE5ABDE1020F5D7F4E8A94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1ED557A4B6A43034B45DC97F /* Project object */;
+}

@@ -1,0 +1,26 @@
+name: ArkheAgentOS
+options:
+  bundleIdPrefix: com.arkhe
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+targets:
+  ArkheAgentOS:
+    type: application
+    platform: macOS
+    sources:
+      - path: ArkheAgentOS
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.arkhe.agentos
+      PRODUCT_NAME: Arkhe AgentOS
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_NSMicrophoneUsageDescription: "Arkhe AgentOS uses the microphone for voice-first mission control."
+      INFOPLIST_KEY_LSUIElement: NO
+      ENABLE_HARDENED_RUNTIME: YES
+      CODE_SIGN_ENTITLEMENTS: ArkheAgentOS/ArkheAgentOS.entitlements
+    entitlements:
+      path: ArkheAgentOS/ArkheAgentOS.entitlements
