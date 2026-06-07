@@ -40,6 +40,20 @@ struct EventPayload: Codable, Sendable {
     let role: String?
     let healthScore: Double?
     let message: String?
+    let fromAgentId: String?
+    let toAgentId: String?
+    let workItemId: String?
+    let handoffReason: String?
+
+    // Model router
+    let taskClass: String?
+    let provider: String?
+    let model: String?
+    let reason: String?
+    let confidence: Double?
+    let layer: Int?
+    let latencyMs: Int?
+    let outputPreview: String?
 
     // Tool / browser
     let toolName: String?
@@ -53,9 +67,40 @@ struct EventPayload: Codable, Sendable {
     // Approval
     let summary: String?
     let action: String?
+    let approvalId: String?
 
     // Generic
     let error: String?
+
+    // Telemetry
+    let sampleIntervalMs: Double?
+    let system: SystemTelemetryPayload?
+    let agents: [AgentTelemetryPayload]?
+}
+
+struct AgentTelemetryPayload: Codable, Sendable {
+    let agentId: String
+    let role: String?
+    let cpuPct: Double
+    let memMb: Int
+    let status: String
+    let currentTask: String?
+    let layer: Int?
+    let provider: String?
+    let model: String?
+    let tokensUsed: Int?
+    let costUsd: Double?
+    let latencyMs: Int?
+    let confidence: Double?
+    let networkKbps: Double?
+}
+
+struct SystemTelemetryPayload: Codable, Sendable {
+    let cpuPct: Double?
+    let memUsedMb: Double?
+    let memTotalMb: Double?
+    let networkTxKbps: Double?
+    let networkRxKbps: Double?
 }
 
 struct MissionCardModel: Identifiable, Sendable {
@@ -77,6 +122,7 @@ struct AgentNodeModel: Identifiable, Sendable {
     var costUsd: Double
     var healthScore: Double
     var parentId: String?
+    var currentWorkItemId: String?
 }
 
 struct EventLogRow: Identifiable, Sendable {

@@ -7,29 +7,61 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10987A7B7FAF42A01844AF84 /* MemoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC620A18A5C81DC40EF0A98 /* MemoryView.swift */; };
+		239524F08C9536C7FD869F2F /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D848B257CC7A7FAB1202410 /* ApprovalsView.swift */; };
+		242D6B4AE696172329BB9304 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C63EC120AC61CDB1D58D2777 /* SettingsView.swift */; };
+		2D978D01445CFFAD467B573C /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */; };
 		301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */; };
+		45F073F454EBE20F57C46BFF /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E35535DE52C3919E0A49BB /* SpeechRecognizer.swift */; };
 		47670BBAB3221F8DF9A9465F /* MissionControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */; };
+		49772DF7FAE205AB09302D07 /* ResidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D654D577D3030F18A9EA051 /* ResidentsView.swift */; };
 		51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE0555F89845483D37F1E1D /* EventModels.swift */; };
 		599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6B216F4F94C6F50A360D6 /* AppState.swift */; };
+		64960340B251383A163A7651 /* BrowserArtifactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */; };
+		6754BCA040886B53E580E28B /* ApprovalsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E6ADAF007BD30FBC52F1C2 /* ApprovalsStore.swift */; };
+		6756074568F3C5E9E8CCACE6 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6C4C89EA3CE1C2BE9ADE0 /* MissionsView.swift */; };
+		752C7A31E8D334E55626CE80 /* DaemonLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF786E78C2529242491F296 /* DaemonLauncher.swift */; };
 		7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3034B8EAEAD5958B6102C75A /* MainWindowView.swift */; };
+		9198294BF9E3558D1C2201ED /* ReplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DC1EB88A9EED98549A2D09 /* ReplayView.swift */; };
+		96B158BCA6D1470F5B4F1303 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F77B0063330F1EC8DBF67F /* OnboardingView.swift */; };
 		A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74921248F80804EAC47F7EF5 /* VoiceBar.swift */; };
+		C056E3CC8A2A9E5E12988126 /* FoundationModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD0983A0C17CB9F7C5BDC68 /* FoundationModelService.swift */; };
 		C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */; };
+		DA2F9913DE693CC3D3C0D109 /* ObservatoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6475A198FA16E48EA08D5F /* ObservatoryView.swift */; };
+		E94C83FDEC5ADF1F4EA2540A /* AgentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306C718A9D29CA6231C99358 /* AgentsView.swift */; };
+		EDBA45B91EEA3E52370F697F /* RuntimeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB28237E1CD42323C1D3751 /* RuntimeModels.swift */; };
 		F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */; };
 		FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1CB28237E1CD42323C1D3751 /* RuntimeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeModels.swift; sourceTree = "<group>"; };
+		28A6C4C89EA3CE1C2BE9ADE0 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		2CD0983A0C17CB9F7C5BDC68 /* FoundationModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelService.swift; sourceTree = "<group>"; };
 		3034B8EAEAD5958B6102C75A /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
+		306C718A9D29CA6231C99358 /* AgentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentsView.swift; sourceTree = "<group>"; };
+		36DC1EB88A9EED98549A2D09 /* ReplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayView.swift; sourceTree = "<group>"; };
 		48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheAgentOSApp.swift; sourceTree = "<group>"; };
+		5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserArtifactsView.swift; sourceTree = "<group>"; };
+		57E35535DE52C3919E0A49BB /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		5D848B257CC7A7FAB1202410 /* ApprovalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsView.swift; sourceTree = "<group>"; };
+		6CC620A18A5C81DC40EF0A98 /* MemoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryView.swift; sourceTree = "<group>"; };
 		70624744DB8C4DDFA8457D31 /* ArkheAgentOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ArkheAgentOS.entitlements; sourceTree = "<group>"; };
 		74921248F80804EAC47F7EF5 /* VoiceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceBar.swift; sourceTree = "<group>"; };
+		7D654D577D3030F18A9EA051 /* ResidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsView.swift; sourceTree = "<group>"; };
 		803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArkheAgentOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A6B216F4F94C6F50A360D6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlViewModel.swift; sourceTree = "<group>"; };
 		BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonClient.swift; sourceTree = "<group>"; };
+		C63EC120AC61CDB1D58D2777 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlView.swift; sourceTree = "<group>"; };
 		CDE0555F89845483D37F1E1D /* EventModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModels.swift; sourceTree = "<group>"; };
+		CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
+		DA6475A198FA16E48EA08D5F /* ObservatoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservatoryView.swift; sourceTree = "<group>"; };
+		EAF786E78C2529242491F296 /* DaemonLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonLauncher.swift; sourceTree = "<group>"; };
+		F2F77B0063330F1EC8DBF67F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		F8E6ADAF007BD30FBC52F1C2 /* ApprovalsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -44,9 +76,28 @@
 		0A96D2A6F2E2F1B6953920B8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				412197BC08A1B00CC95EA17B /* Agents */,
+				0F75D4F83134E1B723EAFD19 /* Approvals */,
+				87E67070EA7DB2E677210821 /* Browser */,
+				A0DC4FA151B3B2D68844D5AD /* Memory */,
 				E66494229B504D70A6354FE0 /* MissionControl */,
+				97138813B2FEAB846F83F1E2 /* Missions */,
+				D7BC8D93DB8F42394DEED192 /* Observatory */,
+				FE6F81A57D8D48141B60C505 /* Replay */,
+				EC3F44CC2C9B2EB2C0085375 /* Residents */,
+				3BEAEA4CE75550400F2A4B45 /* Settings */,
+				29A75BF7D858DEDE32C5E9DA /* Voice */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		0F75D4F83134E1B723EAFD19 /* Approvals */ = {
+			isa = PBXGroup;
+			children = (
+				F8E6ADAF007BD30FBC52F1C2 /* ApprovalsStore.swift */,
+				5D848B257CC7A7FAB1202410 /* ApprovalsView.swift */,
+			);
+			path = Approvals;
 			sourceTree = "<group>";
 		};
 		266A1B180E2EF36412DBD29C /* App */ = {
@@ -54,8 +105,33 @@
 			children = (
 				89A6B216F4F94C6F50A360D6 /* AppState.swift */,
 				3034B8EAEAD5958B6102C75A /* MainWindowView.swift */,
+				F2F77B0063330F1EC8DBF67F /* OnboardingView.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		29A75BF7D858DEDE32C5E9DA /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				57E35535DE52C3919E0A49BB /* SpeechRecognizer.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		3BEAEA4CE75550400F2A4B45 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C63EC120AC61CDB1D58D2777 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		412197BC08A1B00CC95EA17B /* Agents */ = {
+			isa = PBXGroup;
+			children = (
+				306C718A9D29CA6231C99358 /* AgentsView.swift */,
+			);
+			path = Agents;
 			sourceTree = "<group>";
 		};
 		4CD7A3F7803D7505EAC7D8D3 = {
@@ -66,11 +142,54 @@
 			);
 			sourceTree = "<group>";
 		};
+		4F5FC443CB5E7B7CB87D197C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		5596ACD69DD3ECC1A11720A9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EAF786E78C2529242491F296 /* DaemonLauncher.swift */,
+				2CD0983A0C17CB9F7C5BDC68 /* FoundationModelService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		87E67070EA7DB2E677210821 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */,
+			);
+			path = Browser;
+			sourceTree = "<group>";
+		};
+		97138813B2FEAB846F83F1E2 /* Missions */ = {
+			isa = PBXGroup;
+			children = (
+				28A6C4C89EA3CE1C2BE9ADE0 /* MissionsView.swift */,
+			);
+			path = Missions;
+			sourceTree = "<group>";
+		};
+		A0DC4FA151B3B2D68844D5AD /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				6CC620A18A5C81DC40EF0A98 /* MemoryView.swift */,
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
 		A9A43BD00FF213D841174641 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				4F5FC443CB5E7B7CB87D197C /* Config */,
 				AC3923414260F87C3FA745D7 /* IPC */,
 				BEA0078F35BBB6F4A547595F /* Models */,
+				5596ACD69DD3ECC1A11720A9 /* Services */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -96,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				CDE0555F89845483D37F1E1D /* EventModels.swift */,
+				1CB28237E1CD42323C1D3751 /* RuntimeModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -106,6 +226,14 @@
 				8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D7BC8D93DB8F42394DEED192 /* Observatory */ = {
+			isa = PBXGroup;
+			children = (
+				DA6475A198FA16E48EA08D5F /* ObservatoryView.swift */,
+			);
+			path = Observatory;
 			sourceTree = "<group>";
 		};
 		D80B52AF6438A8C1E261C5EF /* ArkheAgentOS */ = {
@@ -128,6 +256,22 @@
 				A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */,
 			);
 			path = MissionControl;
+			sourceTree = "<group>";
+		};
+		EC3F44CC2C9B2EB2C0085375 /* Residents */ = {
+			isa = PBXGroup;
+			children = (
+				7D654D577D3030F18A9EA051 /* ResidentsView.swift */,
+			);
+			path = Residents;
+			sourceTree = "<group>";
+		};
+		FE6F81A57D8D48141B60C505 /* Replay */ = {
+			isa = PBXGroup;
+			children = (
+				36DC1EB88A9EED98549A2D09 /* ReplayView.swift */,
+			);
+			path = Replay;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,14 +329,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E94C83FDEC5ADF1F4EA2540A /* AgentsView.swift in Sources */,
 				599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */,
+				6754BCA040886B53E580E28B /* ApprovalsStore.swift in Sources */,
+				239524F08C9536C7FD869F2F /* ApprovalsView.swift in Sources */,
 				FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */,
+				64960340B251383A163A7651 /* BrowserArtifactsView.swift in Sources */,
 				301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */,
+				752C7A31E8D334E55626CE80 /* DaemonLauncher.swift in Sources */,
 				51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */,
+				C056E3CC8A2A9E5E12988126 /* FoundationModelService.swift in Sources */,
 				7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */,
+				10987A7B7FAF42A01844AF84 /* MemoryView.swift in Sources */,
 				F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */,
 				47670BBAB3221F8DF9A9465F /* MissionControlViewModel.swift in Sources */,
+				6756074568F3C5E9E8CCACE6 /* MissionsView.swift in Sources */,
+				DA2F9913DE693CC3D3C0D109 /* ObservatoryView.swift in Sources */,
+				96B158BCA6D1470F5B4F1303 /* OnboardingView.swift in Sources */,
+				9198294BF9E3558D1C2201ED /* ReplayView.swift in Sources */,
+				49772DF7FAE205AB09302D07 /* ResidentsView.swift in Sources */,
+				EDBA45B91EEA3E52370F697F /* RuntimeModels.swift in Sources */,
+				242D6B4AE696172329BB9304 /* SettingsView.swift in Sources */,
 				C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */,
+				45F073F454EBE20F57C46BFF /* SpeechRecognizer.swift in Sources */,
+				2D978D01445CFFAD467B573C /* SupabaseConfig.swift in Sources */,
 				A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,6 +370,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Arkhe AgentOS uses the microphone for voice-first mission control.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Arkhe AgentOS transcribes voice commands to launch missions.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -349,6 +510,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Arkhe AgentOS uses the microphone for voice-first mission control.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Arkhe AgentOS transcribes voice commands to launch missions.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

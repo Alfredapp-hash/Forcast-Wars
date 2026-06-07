@@ -14,7 +14,7 @@ struct ArkheAgentOSApp: App {
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("New Mission") {
-                    appState.requestNewMission = true
+                    appState.selectedTab = .missionControl
                 }
                 .keyboardShortcut("n", modifiers: [.command])
             }

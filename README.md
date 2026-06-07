@@ -25,12 +25,37 @@ pnpm install
 pnpm dev:daemon
 ```
 
-Open `apps/macos` in Xcode (project scaffold pending).
+Open the native app:
+
+```bash
+open apps/macos/ArkheAgentOS.xcodeproj
+```
+
+Run a daemon smoke test after starting `pnpm dev:daemon`:
+
+```bash
+pnpm smoke:daemon
+```
+
+Or start the full private-alpha loop (build, daemon, smoke test, open Xcode):
+
+```bash
+pnpm start:alpha
+```
 
 ## Docs
 
 - [Event Schema](docs/EVENT_SCHEMA.md)
 - [UI/UX Specification](docs/UI_UX_SPEC.md)
+- [Private Alpha Checklist](docs/release/PRIVATE_ALPHA_CHECKLIST.md)
+
+## Private alpha focus
+
+- Voice/typed mission control through the Director.
+- Agent playground runtime with visible collaboration and work-item handoffs.
+- Free/local-first model routing with Apple Foundation Models integration path.
+- Browser/tool/memory packages shaped for safe expansion.
+- Mission Control as the operating surface for telemetry, model routing, agents, and replay.
 
 ## Product positioning
 

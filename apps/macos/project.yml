@@ -19,6 +19,7 @@ targets:
       PRODUCT_NAME: Arkhe AgentOS
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_NSMicrophoneUsageDescription: "Arkhe AgentOS uses the microphone for voice-first mission control."
+      INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Arkhe AgentOS transcribes voice commands to launch missions."
       INFOPLIST_KEY_LSUIElement: NO
       ENABLE_HARDENED_RUNTIME: YES
       CODE_SIGN_ENTITLEMENTS: ArkheAgentOS/ArkheAgentOS.entitlements

@@ -7,6 +7,12 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "dev:daemon": "turbo run dev --filter=@arkhe/local-daemon",
+    "smoke:daemon": "node scripts/smoke-daemon.mjs",
+    "check:local": "bash scripts/check-local.sh",
+    "start:alpha": "bash infra/dev/start-alpha.sh",
+    "bundle:daemon": "bash infra/dev/bundle-daemon.sh",
+    "package:app": "bash infra/dev/package-app.sh",
+    "qa:alpha": "node scripts/qa-alpha.mjs",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules"

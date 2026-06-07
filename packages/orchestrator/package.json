@@ -11,7 +11,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@arkhe/contracts": "workspace:*"
+    "@arkhe/browser-runtime": "workspace:*",
+    "@arkhe/contracts": "workspace:*",
+    "@arkhe/model-router": "workspace:*",
+    "@arkhe/tool-gateway": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

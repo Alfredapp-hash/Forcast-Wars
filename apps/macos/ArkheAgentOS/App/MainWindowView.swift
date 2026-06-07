@@ -2,17 +2,28 @@ import SwiftUI
 
 struct MainWindowView: View {
     @Environment(AppState.self) private var appState
+    @AppStorage("arkhe.onboardingComplete") private var onboardingComplete = false
 
     var body: some View {
         @Bindable var appState = appState
 
         NavigationSplitView {
-            SidebarView(selectedTab: $appState.selectedTab)
+            SidebarView(
+                selectedTab: $appState.selectedTab,
+                approvalCount: appState.approvalsStore.pending.count
+            )
         } detail: {
-            ZStack(alignment: .bottom) {
-                tabContent
-                VoiceBar(daemonClient: appState.daemonClient)
-                    .padding(.bottom, 12)
+            ZStack(alignment: .top) {
+                ZStack(alignment: .bottom) {
+                    tabContent
+                    VoiceBar(daemonClient: appState.daemonClient)
+                        .padding(.bottom, 12)
+                }
+
+                if let first = appState.approvalsStore.pending.first {
+                    ApprovalBanner(approval: first, daemonClient: appState.daemonClient)
+                        .padding(.top, 12)
+                }
             }
         }
         .toolbar {
@@ -21,11 +32,20 @@ struct MainWindowView: View {
                     Circle()
                         .fill(appState.daemonConnected ? Color.green : Color.red)
                         .frame(width: 8, height: 8)
-                    Text(appState.daemonConnected ? "Daemon" : "Offline")
+                    Text(appState.daemonConnected ? "Daemon" : "Starting…")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
+        }
+        .sheet(isPresented: Binding(
+            get: { !onboardingComplete },
+            set: { if !$0 { onboardingComplete = true } }
+        )) {
+            OnboardingView(
+                daemonClient: appState.daemonClient,
+                complete: { onboardingComplete = true }
+            )
         }
     }
 
@@ -33,23 +53,40 @@ struct MainWindowView: View {
     private var tabContent: some View {
         switch appState.selectedTab {
         case .missionControl:
-            MissionControlView(daemonClient: appState.daemonClient)
+            MissionControlView(
+                daemonClient: appState.daemonClient,
+                viewModel: appState.missionControlViewModel
+            )
         case .missions:
-            PlaceholderScreen(title: "Missions", hint: "Mission history will appear here.")
+            MissionsView(
+                daemonClient: appState.daemonClient,
+                history: appState.missionHistoryStore
+            )
         case .agents:
-            PlaceholderScreen(title: "Agents", hint: "Agents appear when missions run.")
+            AgentsView(daemonClient: appState.daemonClient)
+        case .residents:
+            ResidentsView(daemonClient: appState.daemonClient, store: appState.residentsStore)
         case .browser:
-            PlaceholderScreen(title: "Agent Browser", hint: "WKWebView browser coming soon.")
+            BrowserArtifactsView()
         case .replay:
-            PlaceholderScreen(title: "Replay", hint: "Enable recording on your next mission.")
+            ReplayView(
+                daemonClient: appState.daemonClient,
+                missionId: appState.replayMissionId
+            )
         case .memory:
-            PlaceholderScreen(title: "Memory", hint: "Personal Knowledge Vault coming soon.")
+            MemoryView(daemonClient: appState.daemonClient)
         case .observatory:
-            PlaceholderScreen(title: "Observatory", hint: "Agent observability dashboards coming soon.")
+            ObservatoryView(
+                daemonClient: appState.daemonClient,
+                missionControl: appState.missionControlViewModel
+            )
         case .approvals:
-            PlaceholderScreen(title: "Approvals", hint: "All clear — no pending approvals.")
+            ApprovalsView(
+                daemonClient: appState.daemonClient,
+                store: appState.approvalsStore
+            )
         case .settings:
-            PlaceholderScreen(title: "Settings", hint: "Voice, security, and economics settings.")
+            SettingsView(daemonClient: appState.daemonClient)
         }
     }
 }

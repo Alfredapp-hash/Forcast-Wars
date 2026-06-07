@@ -68,6 +68,7 @@ export interface CostSnapshot {
   outputTokens?: number;
   costUsd?: number;
   model?: string;
+  provider?: string;
 }
 
 export interface TraceContext {
@@ -168,6 +169,46 @@ export interface AgentEvent extends EventEnvelope {
     permissions?: PermissionEnvelope;
     healthScore?: number;
     message?: string;
+    fromAgentId?: AgentId;
+    toAgentId?: AgentId;
+    workItemId?: string;
+    handoffReason?: string;
+    error?: string;
+  };
+}
+
+/** Free/local-first model routing */
+export type ModelEventType =
+  | "model.route.requested"
+  | "model.route.selected"
+  | "model.route.completed"
+  | "model.route.escalated"
+  | "model.route.failed";
+
+export type ModelTaskClass =
+  | "classify_intent"
+  | "summarize_page"
+  | "extract_facts"
+  | "draft_report"
+  | "plan_mission"
+  | "critique_output"
+  | "choose_next_tool";
+
+export interface ModelEvent extends EventEnvelope {
+  eventType: ModelEventType;
+  payload: {
+    taskClass: ModelTaskClass;
+    provider: "apple_foundation" | "local_free" | "free_cloud" | "paid_cloud" | "mock";
+    model: string;
+    reason: string;
+    confidence?: number;
+    fallbackFrom?: string;
+    escalationRequired?: boolean;
+    layer?: number;
+    latencyMs?: number;
+    escalated?: boolean;
+    inputPreview?: string;
+    outputPreview?: string;
     error?: string;
   };
 }
@@ -266,10 +307,19 @@ export interface TelemetryEvent extends EventEnvelope {
     };
     agents?: Array<{
       agentId: AgentId;
+      role?: string;
       cpuPct: number;
       memMb: number;
       status: AgentStatus;
       currentTask?: string;
+      layer?: number;
+      provider?: string;
+      model?: string;
+      tokensUsed?: number;
+      costUsd?: number;
+      latencyMs?: number;
+      confidence?: number;
+      networkKbps?: number;
     }>;
     mission?: {
       completionPct: number;
@@ -351,6 +401,7 @@ export type ArkheEvent =
   | VoiceEvent
   | MissionEvent
   | AgentEvent
+  | ModelEvent
   | ToolEvent
   | BrowserEvent
   | ApprovalEvent

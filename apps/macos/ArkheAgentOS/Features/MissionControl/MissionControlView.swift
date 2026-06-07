@@ -3,7 +3,7 @@ import Charts
 
 struct MissionControlView: View {
     let daemonClient: DaemonClient
-    @State private var viewModel = MissionControlViewModel()
+    @Bindable var viewModel: MissionControlViewModel
     @State private var showKillConfirm = false
 
     var body: some View {
@@ -24,14 +24,6 @@ struct MissionControlView: View {
                 .frame(height: 220)
         }
         .background(Color(nsColor: .windowBackgroundColor))
-        .onAppear {
-            let vm = viewModel
-            daemonClient.onEvent = { message in
-                Task { @MainActor in
-                    vm.ingest(message)
-                }
-            }
-        }
         .confirmationDialog("Kill all agents?", isPresented: $showKillConfirm) {
             Button("Kill Everything", role: .destructive) {
                 daemonClient.sendKillSwitch()
@@ -80,7 +72,9 @@ struct MissionControlView: View {
                 ScrollView {
                     VStack(spacing: 8) {
                         ForEach(viewModel.missions) { mission in
-                            MissionCardView(mission: mission)
+                            MissionCardView(mission: mission) {
+                                daemonClient.pauseMission(missionId: mission.id)
+                            }
                         }
                     }
                     .padding(.horizontal, 12)
@@ -122,6 +116,9 @@ struct MissionControlView: View {
             MetricTile(label: "Active Agents", value: "\(viewModel.activeAgentCount)")
             MetricTile(label: "Cost Today", value: String(format: "$%.2f", viewModel.totalCostToday))
             MetricTile(label: "Pending Approvals", value: "\(viewModel.pendingApprovals)")
+            MetricTile(label: "Daemon Memory", value: String(format: "%.0f MB", viewModel.daemonMemoryMb))
+            MetricTile(label: "Work Items", value: "\(viewModel.workItemsAssigned)")
+            MetricTile(label: "Last Model Route", value: viewModel.lastModelRoute)
 
             if !viewModel.agents.isEmpty {
                 Chart(viewModel.agents) { agent in
@@ -184,12 +181,19 @@ struct MissionControlView: View {
 
 struct MissionCardView: View {
     let mission: MissionCardModel
+    var onPause: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Circle().fill(.green).frame(width: 8, height: 8)
                 Text(mission.title).font(.headline)
+                Spacer()
+                if let onPause {
+                    Button("Pause", action: onPause)
+                        .buttonStyle(.borderless)
+                        .font(.caption)
+                }
             }
             ProgressView(value: mission.completionPct, total: 100)
             HStack {
@@ -230,6 +234,11 @@ struct AgentNodeView: View {
             Text(String(format: "$%.2f · %.0f health", agent.costUsd, agent.healthScore))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            if let workItemId = agent.currentWorkItemId {
+                Text("work · \(workItemId)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)

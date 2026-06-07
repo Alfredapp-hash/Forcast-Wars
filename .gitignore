@@ -11,8 +11,12 @@ dist/
 .DS_Store
 *.xcuserstate
 *.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
 DerivedData/
 build/
+dist/
+.bundle/
+apps/macos/ArkheAgentOS/Resources/Daemon/
 
 # Environment
 .env

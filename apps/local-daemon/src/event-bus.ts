@@ -10,6 +10,7 @@ type EventHandler = (message: EventStreamMessage) => void;
 export class EventBus {
   private handlers = new Set<EventHandler>();
   private connected = false;
+  private publishedEvents = 0;
 
   constructor(_config: ServerConfig) {}
 
@@ -28,8 +29,17 @@ export class EventBus {
     return () => this.handlers.delete(handler);
   }
 
+  isConnected(): boolean {
+    return this.connected;
+  }
+
+  get eventCount(): number {
+    return this.publishedEvents;
+  }
+
   async publish(event: ArkheEvent, source: EventStreamMessage["source"] = "daemon"): Promise<void> {
     if (!this.connected) return;
+    this.publishedEvents += 1;
 
     const message: EventStreamMessage = {
       topic: `arkhe.events.${event.eventType.split(".")[0]}`,

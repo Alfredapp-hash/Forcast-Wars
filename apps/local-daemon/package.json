@@ -11,8 +11,13 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@arkhe/browser-runtime": "workspace:*",
     "@arkhe/contracts": "workspace:*",
+    "@arkhe/memory": "workspace:*",
+    "@arkhe/model-router": "workspace:*",
     "@arkhe/orchestrator": "workspace:*",
+    "@arkhe/supabase-sync": "workspace:*",
+    "@arkhe/tool-gateway": "workspace:*",
     "ws": "^8.18.2"
   },
   "devDependencies": {
