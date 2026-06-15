@@ -2,7 +2,7 @@
 # Start Forecast Wars local dev stack: Hermes + daemon + Next.js website
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
 bash scripts/sync-forecast-wars-env.sh
