@@ -44,14 +44,18 @@ Expected:
 - Ark Vault search returns Supabase memories or falls back cleanly.
 - Runtime settings return budget/cloud gates.
 
-## Alpha Scope
+## Alpha Scope (Baseline — now complete)
 
 - Voice/typed commands route through Director.
-- Persistent resident agents activate on demand.
-- Model router uses Apple FM bridge, Ollama, specialists, and cloud gates.
-- Mission Control, Residents, Observatory, Approvals, Replay, Memory, and Browser are wired.
-- Supabase Ark-playground stores agents and episodic memories.
-- Local daemon can be bundled into the macOS app Resources with Node.
+- Persistent resident agents (with cortices) activate on demand; Core Cortex (Director, Security, Voice, Observability, Ark Vault) starts warm.
+- 4-layer model router (Apple FM bridge, Ollama, specialists, cloud gates) with full telemetry.
+- Neural Agent Layer / Arkhe Neural Mesh: SynapseEngine produces weighted, replayable `synapse.*` events; `agent_synapses` persisted to Supabase.
+- Memory stack complete for alpha (L1 editable `MEMORIES.md` + reflections, L2/L3 pgvector activation ranking, Dreaming service).
+- Mission Control, Residents (with Neural Mesh list + proposals), Observatory (AI Resource Manager), Approvals (banner + list), Replay (events + screenshots), Memory (local + Ark Vault + human), Browser (artifacts + live WKWebView preview), Agents, Missions, Settings all wired.
+- Supabase Ark-playground stores agents, episodic memories, and agent synapses.
+- Local daemon bundles into the macOS app (portable Node + pnpm deploy) and `pnpm package:app` produces a DMG.
+
+See `docs/PREMIUM_CHECKLIST.md` for the full plan to take this to Premium & Go (interactive DNA visualization, live dual-mode Agent Browser, rich Replay exports, automated notarization, polish, distribution, etc.).
 
 ## Safety Defaults
 
@@ -63,13 +67,19 @@ Expected:
 
 ## Tester Script
 
-1. Launch the app.
-2. Complete onboarding checks.
+Full premium pre-alpha script: **`docs/MANUAL_TESTER_SCRIPT.md`** (daemon launch, onboarding, compliance ZIP, attention scan, support/privacy smoke).
+
+Quick pass:
+
+1. Launch the app (bundled: `pnpm bundle:daemon` first; dev: `pnpm start:alpha` or `ARKHE_AUTO_APPROVE=1 pnpm dev:daemon`).
+2. Complete onboarding checks (Ollama + Playwright required; YouTube optional).
 3. Open Residents and wake Research Agent.
 4. Run: “Director, audit my website at arkhe.com”.
 5. Approve publish when prompted.
 6. Open Observatory and verify active AI resources.
 7. Open Browser and inspect the captured page.
-8. Open Missions → Replay.
-9. Open Memory → Ark Vault and search “audit”.
-10. Export audit JSON.
+8. Open Missions → Replay → Export Compliance Package + PDF Summary.
+9. AgentOS menu → Scan for Attention Opportunities.
+10. Open Memory → Ark Vault and search “audit”.
+11. Settings → Send Feedback + Privacy Policy links.
+12. Kill switch smoke.

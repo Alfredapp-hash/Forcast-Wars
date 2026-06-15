@@ -6,12 +6,21 @@ import type { Director } from "@arkhe/orchestrator";
 import { HealthService } from "../health/status.js";
 import { AgentRuntime } from "../agent-runtime/runtime.js";
 import type { LocalMemoryStore } from "@arkhe/memory";
+import type { HumanMemoryStore } from "@arkhe/memory";
 import type { ApprovalGate } from "../approvals/gate.js";
 import type { AiResourceManager } from "../telemetry/ai-resource-manager.js";
 import type { AgentRegistry } from "@arkhe/orchestrator";
+import type { SynapseEngine } from "@arkhe/orchestrator";
 import type { AppleFmBridge } from "../apple-fm/bridge.js";
 import type { SupabaseSync } from "@arkhe/supabase-sync";
 import { getRuntimeSettings, updateRuntimeSettings } from "@arkhe/orchestrator";
+import type { DreamingService } from "../memory/dreaming.js";
+import type { AttentionOrchestrator } from "../attention/trend-intelligence.js";
+import { getAttentionConfigStore } from "../attention/attention-config.js";
+import { getDocumentaryConfigStore } from "../documentary/documentary-config.js";
+import type { DocumentaryOrchestrator } from "../documentary/documentary-pipeline.js";
+import type { DebateOrchestrator } from "../forecast-wars/debate-orchestrator.js";
+import type { DebateRunner } from "../forecast-wars/debate-runner.js";
 
 interface ClientMessage {
   type: string;
@@ -30,6 +39,29 @@ interface ClientMessage {
     defaultBudgetUsd?: number;
     maxMissionBudgetUsd?: number;
     paidCloudEnabled?: boolean;
+    markdown?: string;
+    tags?: string[];
+    agentId?: string;
+    scope?: string;   // for dream_now / media_dream_now
+    youtubeApiKey?: string | null;
+    youtubeTrendQuery?: string;
+    youtubeRefreshToken?: string | null;
+    xBearerToken?: string | null;
+    xTrendQuery?: string;
+    enabled?: boolean;
+    publishingMode?: string;
+    qualityThreshold?: number;
+    pipelineBudgetUsd?: number;
+    force?: boolean;
+    predictionId?: string;
+    predictionSlug?: string;
+    title?: string;
+    description?: string;
+    yesPosition?: string;
+    noPosition?: string;
+    debateRoomId?: string;
+    affirmativeAgentId?: string;
+    negativeAgentId?: string;
   };
 }
 
@@ -44,12 +76,19 @@ export class IpcServer {
     private readonly eventBus: EventBus,
     private readonly director: Director,
     private readonly approvalGate: ApprovalGate,
+    private readonly healthService: HealthService,
     private readonly memoryStore?: LocalMemoryStore,
     private readonly agentRegistry?: AgentRegistry,
+    private readonly synapseEngine?: SynapseEngine,
     private readonly aiResources?: AiResourceManager,
     private readonly appleFmBridge?: AppleFmBridge,
     private readonly supabaseSync?: SupabaseSync,
-    private readonly healthService = new HealthService(eventBus),
+    private readonly humanMemory?: HumanMemoryStore,
+    private readonly dreaming?: DreamingService,
+    private readonly attention?: AttentionOrchestrator,
+    private readonly documentary?: DocumentaryOrchestrator,
+    private readonly debateOrchestrator?: DebateOrchestrator,
+    private readonly debateRunner?: DebateRunner,
     private readonly agentRuntime = new AgentRuntime(),
   ) {
     this.appleFmBridge?.setBroadcast((request) => {
@@ -61,7 +100,18 @@ export class IpcServer {
     this.unsubscribe = this.eventBus.subscribe((message) => {
       this.agentRuntime.ingest(message.event);
       this.aiResources?.ingest(message.event);
+      this.documentary?.ingest(message.event);
       this.memoryStore?.append(message.event);
+      this.dreaming?.ingest?.(message.event);
+      const synapseEvents = this.synapseEngine?.ingest(message.event) ?? [];
+      for (const event of synapseEvents) {
+        void this.eventBus.publish(event);
+      }
+      if (synapseEvents.length > 0) {
+        void this.syncExperts().then(() => {
+          void this.supabaseSync?.syncSynapses(this.synapseEngine?.snapshot().synapses ?? []);
+        });
+      }
       void this.supabaseSync?.syncEventMemory(message.event);
       this.broadcast({ type: "event", message });
     });
@@ -124,7 +174,9 @@ export class IpcServer {
         }
         break;
       case "health":
-        this.send(ws, { type: "health", status: this.healthService.snapshot(this.clients.size) });
+        void this.healthService.snapshotAsync(this.clients.size).then((status) => {
+          this.send(ws, { type: "health", status });
+        });
         break;
       case "runtime_snapshot":
         this.send(ws, {
@@ -132,8 +184,15 @@ export class IpcServer {
           snapshot: {
             ...this.agentRuntime.snapshot(),
             experts: this.agentRegistry?.snapshot() ?? [],
+            neuralMesh: this.synapseEngine?.snapshot() ?? { synapses: [], proposedExperts: [] },
             aiResources: this.aiResources?.snapshot() ?? [],
           },
+        });
+        break;
+      case "synapse_snapshot":
+        this.send(ws, {
+          type: "synapse_snapshot",
+          snapshot: this.synapseEngine?.snapshot() ?? { synapses: [], proposedExperts: [] },
         });
         break;
       case "expert_list":
@@ -174,8 +233,125 @@ export class IpcServer {
       case "vault_search":
         this.send(ws, {
           type: "vault_search",
-          results: await this.supabaseSync?.searchVault(msg.payload?.query ?? "") ?? [],
+          results: await this.supabaseSync?.searchVault(msg.payload?.query ?? "", 25, {
+            agentId: msg.payload?.agentId,
+            missionId: msg.payload?.missionId,
+            tags: msg.payload?.tags,
+          }) ?? [],
         });
+        break;
+      case "memories_read":
+        this.send(ws, {
+          type: "memories_read",
+          markdown: await this.humanMemory?.read() ?? "",
+        });
+        break;
+      case "memories_write":
+        if (this.humanMemory && msg.payload?.markdown !== undefined) {
+          await this.humanMemory.write(msg.payload.markdown);
+        }
+        this.send(ws, {
+          type: "memories_read",
+          markdown: await this.humanMemory?.read() ?? "",
+        });
+        break;
+      case "dream_now":
+      case "media_dream_now": {
+        const scope = msg.type === "media_dream_now"
+          ? "media"
+          : (msg.payload?.scope === "media" ? "media" : "both");
+        const reason = msg.type === "media_dream_now" ? "ipc:media_dream_now" : "ipc:dream_now";
+        this.send(ws, {
+          type: "dreaming_status",
+          status: await this.dreaming?.run(reason, { scope: scope as any }),
+        });
+        break;
+      }
+      case "dreaming_status":
+        this.send(ws, {
+          type: "dreaming_status",
+          status: this.dreaming?.getStatus() ?? { enabled: false, eventCount: 0 },
+        });
+        break;
+      case "attention_config":
+        this.send(ws, {
+          type: "attention_config",
+          config: getAttentionConfigStore().getStatus(),
+        });
+        break;
+      case "attention_config_update": {
+        const updatePayload: {
+          youtubeApiKey?: string | null;
+          youtubeTrendQuery?: string;
+          youtubeRefreshToken?: string | null;
+          xBearerToken?: string | null;
+          xTrendQuery?: string;
+        } = {};
+        if (msg.payload && "youtubeApiKey" in msg.payload) {
+          updatePayload.youtubeApiKey = msg.payload.youtubeApiKey ?? null;
+        }
+        if (msg.payload?.youtubeTrendQuery !== undefined) {
+          updatePayload.youtubeTrendQuery = msg.payload.youtubeTrendQuery;
+        }
+        if (msg.payload && "youtubeRefreshToken" in msg.payload) {
+          updatePayload.youtubeRefreshToken = msg.payload.youtubeRefreshToken ?? null;
+        }
+        if (msg.payload && "xBearerToken" in msg.payload) {
+          updatePayload.xBearerToken = msg.payload.xBearerToken ?? null;
+        }
+        if (msg.payload?.xTrendQuery !== undefined) {
+          updatePayload.xTrendQuery = msg.payload.xTrendQuery;
+        }
+        const config = await getAttentionConfigStore().update(updatePayload);
+        this.send(ws, { type: "attention_config", config });
+        break;
+      }
+      case "documentary_config":
+        this.send(ws, {
+          type: "documentary_config",
+          config: getDocumentaryConfigStore().getStatus(),
+          status: this.documentary?.getStatus() ?? null,
+        });
+        break;
+      case "documentary_config_update": {
+        const docConfig = await getDocumentaryConfigStore().update({
+          enabled: msg.payload?.enabled,
+          publishingMode: msg.payload?.publishingMode as
+            | "shadow"
+            | "supervised"
+            | "autonomous"
+            | undefined,
+          qualityThreshold: msg.payload?.qualityThreshold,
+          pipelineBudgetUsd: msg.payload?.pipelineBudgetUsd,
+        });
+        this.send(ws, {
+          type: "documentary_config",
+          config: docConfig,
+          status: this.documentary?.getStatus() ?? null,
+        });
+        break;
+      }
+      case "documentary_run":
+        void this.documentary
+          ?.runPipeline({ force: Boolean(msg.payload?.force) })
+          .then((run) => {
+            this.send(ws, { type: "documentary_run", status: "completed", run });
+          })
+          .catch((error) => {
+            this.send(ws, {
+              type: "documentary_run",
+              status: "failed",
+              error: error instanceof Error ? error.message : String(error),
+            });
+          });
+        this.send(ws, { type: "documentary_run", status: "started" });
+        break;
+      case "attention_scan":
+        // Fire-and-forget the full Attention Cortex loop (trend → opportunity → content → video → publish → analytics)
+        void this.attention?.scan({ maxOpportunities: 5 }).then(() => {
+          this.send(ws, { type: "attention_scan", status: "completed" });
+        });
+        this.send(ws, { type: "attention_scan", status: "started" });
         break;
       case "memory_search":
         this.send(ws, {
@@ -233,6 +409,37 @@ export class IpcServer {
       case "kill_switch":
         this.agentRuntime.terminateAll();
         await this.director.killAll();
+        break;
+      case "debate_start":
+        if (this.debateOrchestrator && msg.payload?.title && msg.payload?.predictionId) {
+          const result = await this.debateOrchestrator.startDebate({
+            predictionId: msg.payload.predictionId,
+            predictionSlug: msg.payload.predictionSlug ?? msg.payload.title.toLowerCase().replace(/\s+/g, "-"),
+            title: msg.payload.title,
+            description: msg.payload.description ?? "",
+            yesPosition: msg.payload.yesPosition ?? "",
+            noPosition: msg.payload.noPosition ?? "",
+            affirmativeAgentId: msg.payload.affirmativeAgentId,
+            negativeAgentId: msg.payload.negativeAgentId,
+          });
+          this.send(ws, { type: "debate_started", missionId: result.missionId });
+        }
+        break;
+      case "debate_run":
+        if (this.debateRunner && msg.payload?.debateRoomId && msg.payload?.predictionId && msg.payload?.title) {
+          void this.debateRunner
+            .runFullFlow({
+              debateRoomId: msg.payload.debateRoomId,
+              predictionId: msg.payload.predictionId,
+              title: msg.payload.title,
+              yesPosition: msg.payload.yesPosition ?? "",
+              noPosition: msg.payload.noPosition ?? "",
+              affirmativeAgentId: msg.payload.affirmativeAgentId ?? "agt_athena",
+              negativeAgentId: msg.payload.negativeAgentId ?? "agt_prometheus",
+            })
+            .then(() => this.send(ws, { type: "debate_run_complete" }))
+            .catch((err) => this.send(ws, { type: "debate_run_error", error: String(err) }));
+        }
         break;
     }
   }

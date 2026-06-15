@@ -10,7 +10,16 @@ const requiredEvents = [
   "browser.navigate",
   "approval.requested",
   "approval.granted",
+  "synapse.message",
+  "synapse.strengthened",
   "mission.completed",
+  "attention.scan.started",
+  "trend.detected",
+  "opportunity.scored",
+  "content.generated",
+  "video.produced",
+  "analytics.media.report",
+  "media.dream.reflection",
 ];
 
 const requiredReplies = [
@@ -21,6 +30,10 @@ const requiredReplies = [
   "runtime_settings",
   "supabase_status",
   "vault_search",
+  "memories_read",
+  "dreaming_status",
+  "synapse_snapshot",
+  "attention_scan",
 ];
 
 const timeout = setTimeout(() => {
@@ -30,7 +43,7 @@ const timeout = setTimeout(() => {
   });
   ws.close();
   process.exit(1);
-}, 30000);
+}, 45000);
 
 ws.addEventListener("open", () => {
   send({ type: "subscribe", topics: ["arkhe.events.*"] });
@@ -43,7 +56,15 @@ ws.addEventListener("open", () => {
     payload: { defaultBudgetUsd: 5, maxMissionBudgetUsd: 25, paidCloudEnabled: false },
   });
   send({ type: "supabase_status" });
+  send({ type: "memories_read" });
   send({ type: "vault_search", payload: { query: "audit" } });
+  send({ type: "dreaming_status" });
+  send({ type: "synapse_snapshot" });
+  send({ type: "attention_scan" });
+  // Exercise the Dreaming Agent (Media) attn-6 path: wait for the async analytics.media.report inside the scan stub, then force a dedicated media reflection.
+  setTimeout(() => {
+    send({ type: "media_dream_now" });
+  }, 2200);
   send({
     type: "command",
     payload: { source: "api", utterance: "Director, audit my website at arkhe.com" },
@@ -53,7 +74,16 @@ ws.addEventListener("open", () => {
 ws.addEventListener("message", (event) => {
   const msg = JSON.parse(event.data.toString());
   if (requiredReplies.includes(msg.type)) replies.add(msg.type);
-  if (msg.type === "event") seen.add(msg.message.event.eventType);
+  if (msg.type === "event") {
+    const arkheEvent = msg.message?.event;
+    if (arkheEvent?.eventType) seen.add(arkheEvent.eventType);
+    if (arkheEvent?.eventType === "approval.requested" && arkheEvent.payload?.approvalId) {
+      send({
+        type: "approval_resolve",
+        payload: { approvalId: arkheEvent.payload.approvalId, granted: true },
+      });
+    }
+  }
 
   if (
     requiredEvents.every((eventType) => seen.has(eventType)) &&

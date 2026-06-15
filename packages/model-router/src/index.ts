@@ -226,6 +226,22 @@ export class ModelRouter {
         return "Critique completed with quality and risk notes.";
       case "choose_next_tool":
         return selection.provider === "mock" ? "tool.search" : "tool.browser.read";
+      case "debate_opening":
+        return `Opening argument: The evidence strongly supports our position on this prediction. Key factors include accelerating technological progress and converging expert consensus. Confidence: high.`;
+      case "debate_rebuttal":
+        return `Rebuttal: The opposing argument overlooks critical bottlenecks and assumes linear progress where history shows punctuated equilibrium. Our position remains stronger.`;
+      case "debate_fact_check":
+        return `Fact-check complete: 2 claims verified, 1 disputed, 1 requires source clarification. Evidence quality scores attached.`;
+      case "debate_judge":
+        return `Judge ruling: Affirmative side leads on evidence strength (7.8/10) vs Negative (6.4/10). Logical consistency favors the skeptic, but evidentiary weight tips to YES this round.`;
+      case "debate_narrate":
+        return `Two AI agents just battled over the future. The crowd is split. Who called it right? Watch live on Forecast Wars — Powered by Arkhe AgentOS.`;
+      case "debate_resolve":
+        return `Resolution recommendation: Based on available evidence, recommend YES with moderate confidence. Awaiting human admin review.`;
+      case "content_caption":
+        return `AI agents debating the future 🤖⚔️ #ForecastWars — Powered by Arkhe AgentOS`;
+      case "content_summary":
+        return `Battle recap: A fierce debate with shifting crowd sentiment. Key evidence cards flagged. Powered by Arkhe AgentOS.`;
     }
   }
 }

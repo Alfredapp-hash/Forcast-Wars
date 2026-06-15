@@ -2,7 +2,7 @@
 
 Version **1.0** · Source of truth: `packages/contracts/src/events.ts` · Transport: `infra/proto/events.proto`
 
-Every subsystem — voice, Director, agents, tools, browser, approvals, telemetry, recording, memory, audit — emits into this schema. Mission Control, replay, cost accounting, and compliance exports all read from it.
+Every subsystem — voice, Director, agents, tools, browser, approvals, telemetry, recording, memory, synapses, audit — emits into this schema. Mission Control, replay, cost accounting, and compliance exports all read from it.
 
 ---
 
@@ -289,7 +289,107 @@ Feeds Mission Control charts and Agent Observatory.
 
 ---
 
-### 10. Audit (`audit.entry`)
+### 10. Synapse (`synapse.*`)
+
+Neural Mesh events record inspectable, replayable agent relationships.
+
+| Event | When emitted |
+|-------|--------------|
+| `synapse.message` | Agent-to-agent message routed through the Synapse Engine |
+| `synapse.strengthened` | Mission success reinforces a relationship |
+| `synapse.weakened` | Mission failure weakens a relationship |
+| `synapse.proposed_agent` | Repeated collaboration suggests an emergent specialist |
+
+**Example:**
+
+```json
+{
+  "eventType": "synapse.strengthened",
+  "payload": {
+    "synapseId": "syn_resident_seo_resident_content",
+    "sourceAgentId": "agt_resident_seo",
+    "targetAgentId": "agt_resident_content",
+    "sourceRole": "SEO Agent",
+    "targetRole": "Content Agent",
+    "weight": 0.92,
+    "delta": 0.06,
+    "successScore": 1,
+    "reason": "Mission succeeded with both agents active"
+  }
+}
+```
+
+---
+
+### 11. Attention / Media (`attention.*`, `trend.*`, `opportunity.*`, `content.*`, `video.*`, `analytics.media.*`, `media.dream.*`)
+
+Events for the Attention Cortex — the Autonomous Media Company inside AgentOS.
+
+The loop: scan → trend.detected → opportunity.scored/selected → content.generated → video.produced (Veo/Runway/Kling/Hailuo) → video.published / publish.scheduled → analytics.media.report → media.dream.reflection (feeds Neural Mesh + proposes evolved agents).
+
+| Event | When emitted |
+|-------|--------------|
+| `attention.scan.started` / `attention.scan.completed` | Director or scheduled job kicks off a trend sweep |
+| `trend.detected` | Trend Intelligence Agent surfaces a signal (source, velocity, growth) |
+| `opportunity.scored` | Opportunity Agent produces a ranked score + rationale |
+| `opportunity.selected` | High-value opportunity promoted to a media mission |
+| `content.generated` | Script, hook, storyboard, description, hashtags, etc. |
+| `video.produced` | Video Production Agent called an external model (provider + model recorded) |
+| `video.published` | YouTube (or Shorts) upload completed with externalId + url |
+| `publish.scheduled` | Future publish time set |
+| `analytics.media.report` | Performance numbers (views, CTR, retention, subs) ingested |
+| `media.dream.reflection` | Dreaming Agent (Media) explains why something worked/failed and emits synapse deltas |
+| `media.strategy.evolved` | New specialist agent proposed or strategy parameters updated from performance |
+
+**Key payload fields (union across the family):**
+- `source`, `topic`, `velocity`, `searchGrowthPct`, `competitionScore`, `opportunityScore`
+- `assetType`, `contentRef`, `videoProvider` ("veo" | "runway" | "kling" | "hailuo"), `videoModel`, `durationSec`
+- `platform`, `externalId`, `url`, `scheduledAt`
+- `views`, `ctr`, `watchTimeAvgSec`, `retentionPct`, `subsDelta`
+- `reflection`, `performanceDelta`, `synapseUpdates`, `proposedNewAgentRole`
+- 80/20 note lives in the generated content and in reflections (valuable + meta storytelling).
+
+**Example (trend → opportunity → reflection flow):**
+
+```json
+{
+  "eventType": "trend.detected",
+  "payload": {
+    "source": "youtube",
+    "topic": "AI tools 2026",
+    "velocity": 12400,
+    "searchGrowthPct": 410,
+    "competitionScore": 28
+  }
+}
+{
+  "eventType": "opportunity.scored",
+  "payload": {
+    "topic": "AI tools 2026",
+    "opportunityScore": 92,
+    "reason": "Explosive growth, low competition in productivity niche, strong brand fit"
+  }
+}
+{
+  "eventType": "media.dream.reflection",
+  "payload": {
+    "title": "Top 5 AI Tools This Week",
+    "reflection": "High CTR on hook 'Most people are sleeping on #3'. Retention dropped at 47s — we need tighter B-roll and a stronger second beat. Sub delta +312. Strengthened Trend Intelligence ↔ Opportunity and Content ↔ Video Production.",
+    "performanceDelta": 0.18,
+    "synapseUpdates": [
+      {"sourceRole": "Trend Intelligence Agent", "targetRole": "Opportunity Agent", "delta": 0.07},
+      {"sourceRole": "Content Agent", "targetRole": "Video Production Agent", "delta": 0.09}
+    ],
+    "proposedNewAgentRole": "Viral Short Strategist"
+  }
+}
+```
+
+These events are the primary training signal for the Neural Mesh in the attention domain and are what let the system literally evolve better media creators over time.
+
+---
+
+### 12. Audit (`audit.entry`)
 
 Append-only, hash-chained compliance log. Every significant action mirrors here.
 
@@ -325,6 +425,8 @@ arkhe.events.approval
 arkhe.events.telemetry
 arkhe.events.recording
 arkhe.events.memory
+arkhe.events.synapse
+arkhe.events.attention
 arkhe.events.audit
 ```
 

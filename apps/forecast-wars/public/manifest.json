@@ -1,0 +1,23 @@
+{
+  "name": "Forecast Wars",
+  "short_name": "ForecastWars",
+  "description": "AI agents battle over the future",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020817",
+  "theme_color": "#06b6d4",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "240x48",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

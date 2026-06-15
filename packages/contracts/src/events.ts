@@ -4,6 +4,7 @@
  */
 export type MissionId = `mis_${string}`;
 export type AgentId = `agt_${string}`;
+export type SynapseId = `syn_${string}`;
 export type WorkspaceId = `wsp_${string}`;
 export type ApprovalId = `apr_${string}`;
 export type TraceId = `trc_${string}`;
@@ -192,7 +193,15 @@ export type ModelTaskClass =
   | "draft_report"
   | "plan_mission"
   | "critique_output"
-  | "choose_next_tool";
+  | "choose_next_tool"
+  | "debate_opening"
+  | "debate_rebuttal"
+  | "debate_fact_check"
+  | "debate_judge"
+  | "debate_narrate"
+  | "debate_resolve"
+  | "content_caption"
+  | "content_summary";
 
 export interface ModelEvent extends EventEnvelope {
   eventType: ModelEventType;
@@ -379,6 +388,134 @@ export interface MemoryEvent extends EventEnvelope {
   };
 }
 
+/** Neural Agent Layer — weighted relationships between resident agents */
+export type SynapseEventType =
+  | "synapse.message"
+  | "synapse.strengthened"
+  | "synapse.weakened"
+  | "synapse.proposed_agent";
+
+export interface SynapseEvent extends EventEnvelope {
+  eventType: SynapseEventType;
+  payload: {
+    synapseId?: SynapseId;
+    sourceAgentId: AgentId;
+    targetAgentId: AgentId;
+    sourceRole?: string;
+    targetRole?: string;
+    message?: string;
+    weight?: number;
+    delta?: number;
+    successScore?: number;
+    reason?: string;
+    proposedRole?: string;
+    evidence?: string[];
+  };
+}
+
+/** Attention Cortex / Autonomous Media Company (trend → opportunity → content → video → publish → analyze → dream → evolve) */
+export type AttentionEventType =
+  | "attention.scan.started"
+  | "attention.scan.completed"
+  | "trend.detected"
+  | "opportunity.scored"
+  | "opportunity.selected"
+  | "content.generated"
+  | "video.produced"
+  | "video.published"
+  | "publish.scheduled"
+  | "analytics.media.report"
+  | "media.dream.reflection"
+  | "media.strategy.evolved";
+
+export interface AttentionEvent extends EventEnvelope {
+  eventType: AttentionEventType;
+  payload: {
+    // Trend / opportunity signals
+    source?: "youtube" | "tiktok" | "shorts" | "x" | "reddit" | "google_trends" | "search_console" | "internal";
+    topic?: string;
+    velocity?: number;           // views per hour or similar
+    searchGrowthPct?: number;
+    competitionScore?: number;   // lower is better
+    opportunityScore?: number;   // 0-100
+    reason?: string;
+
+    // Content / video
+    assetType?: "script" | "storyboard" | "hook" | "video" | "thumbnail" | "description" | "hashtags";
+    contentRef?: ArtifactRef;
+    videoProvider?: "veo" | "runway" | "kling" | "hailuo" | "other";
+    videoModel?: string;
+    durationSec?: number;
+    style?: string;
+
+    // Publishing
+    platform?: "youtube" | "youtube_shorts" | "x" | "linkedin" | "reddit" | "blog";
+    externalId?: string;
+    url?: string;
+    scheduledAt?: ISOTimestamp;
+
+    // Analytics
+    views?: number;
+    ctr?: number;
+    watchTimeAvgSec?: number;
+    retentionPct?: number;
+    subsDelta?: number;
+    trafficSources?: Record<string, number>;
+
+    // Dreaming / evolution
+    reflection?: string;
+    performanceDelta?: number;
+    synapseUpdates?: Array<{ sourceRole: string; targetRole: string; delta: number }>;
+    proposedNewAgentRole?: string;
+
+    // General
+    title?: string;
+    summary?: string;
+    tags?: string[];
+  };
+}
+
+/** Self-Documentary — autonomous OS development channel pipeline */
+export type DocumentaryEventType =
+  | "documentary.pipeline.started"
+  | "documentary.idea.found"
+  | "documentary.research.completed"
+  | "documentary.mission_fit.checked"
+  | "documentary.script.drafted"
+  | "documentary.capture.recorded"
+  | "documentary.narration.produced"
+  | "documentary.visuals.produced"
+  | "documentary.video.rendered"
+  | "documentary.metadata.prepared"
+  | "documentary.compliance.checked"
+  | "documentary.published"
+  | "documentary.blog.posted"
+  | "documentary.monitor.updated"
+  | "documentary.pipeline.completed"
+  | "documentary.pipeline.failed"
+  | "documentary.sustainability.updated";
+
+export interface DocumentaryEvent extends EventEnvelope {
+  eventType: DocumentaryEventType;
+  payload: {
+    runId?: string;
+    stage?: string;
+    publishMode?: "shadow" | "supervised" | "autonomous";
+    agentRoles?: string[];
+    title?: string;
+    summary?: string;
+    qualityScore?: number;
+    qualityGatesPassed?: string[];
+    readinessScore?: number;
+    passed?: boolean;
+    platform?: "youtube" | "blog";
+    externalId?: string;
+    url?: string;
+    error?: string;
+    tags?: string[];
+  };
+}
+
 /** Audit log — append-only, hash-chained */
 export type AuditEventType = "audit.entry";
 
@@ -396,6 +533,41 @@ export interface AuditEvent extends EventEnvelope {
   };
 }
 
+/** Forecast Wars — AI debate arena events */
+export type DebateEventType =
+  | "debate.room_created"
+  | "debate.round_started"
+  | "debate.turn_submitted"
+  | "debate.round_completed"
+  | "debate.evidence_flagged"
+  | "debate.judge_scored"
+  | "debate.resolved"
+  | "prediction.created"
+  | "debate.advance_round"
+  | "debate.resolve_request";
+
+export interface DebateEvent extends EventEnvelope {
+  eventType: DebateEventType;
+  payload: {
+    debateRoomId?: string;
+    predictionId?: string;
+    predictionSlug?: string;
+    roundNumber?: number;
+    roundType?: string;
+    agentId?: AgentId;
+    agentRole?: string;
+    side?: "yes" | "no" | "neutral";
+    content?: string;
+    confidenceScore?: number;
+    evidenceScore?: number;
+    winningSide?: "yes" | "no";
+    outcome?: "yes" | "no";
+    title?: string;
+    summary?: string;
+    error?: string;
+  };
+}
+
 /** Union of all canonical events */
 export type ArkheEvent =
   | VoiceEvent
@@ -408,7 +580,11 @@ export type ArkheEvent =
   | TelemetryEvent
   | RecordingEvent
   | MemoryEvent
-  | AuditEvent;
+  | SynapseEvent
+  | AttentionEvent
+  | DocumentaryEvent
+  | AuditEvent
+  | DebateEvent;
 
 export type EventType = ArkheEvent["eventType"];
 

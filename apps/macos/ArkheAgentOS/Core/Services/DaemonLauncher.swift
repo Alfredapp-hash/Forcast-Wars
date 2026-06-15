@@ -1,14 +1,54 @@
 import Foundation
 
+enum DaemonLaunchOutcome: Sendable, Equatable {
+    case alreadyRunning
+    case started(pid: Int32, usedBundledNode: Bool)
+    case entryNotFound
+    case startFailed(String)
+    case startedButUnreachable(pid: Int32)
+
+    var userMessage: String {
+        switch self {
+        case .alreadyRunning:
+            return "Daemon is running at ws://127.0.0.1:9470"
+        case .started(let pid, let bundled):
+            let nodeSource = bundled ? "bundled Node" : "system Node"
+            return "Started local daemon (pid \(pid)) via \(nodeSource)"
+        case .entryNotFound:
+            return "Could not locate the daemon entrypoint. Run `pnpm bundle:daemon` and rebuild the app, or set ARKHE_REPO_ROOT for dev."
+        case .startFailed(let reason):
+            return "Failed to start daemon: \(reason)"
+        case .startedButUnreachable(let pid):
+            return "Daemon process started (pid \(pid)) but ws://127.0.0.1:9470 is not responding yet. Retry in a few seconds."
+        }
+    }
+
+    var isHealthy: Bool {
+        switch self {
+        case .alreadyRunning, .started: return true
+        default: return false
+        }
+    }
+}
+
 final class DaemonLauncher: @unchecked Sendable {
     private var process: Process?
     private let wsURL = URL(string: "ws://127.0.0.1:9470")!
+    private(set) var lastOutcome: DaemonLaunchOutcome?
 
-    func ensureRunning() {
-        guard !isDaemonReachable() else { return }
+    @discardableResult
+    func ensureRunning() -> DaemonLaunchOutcome {
+        if isDaemonReachable() {
+            let outcome: DaemonLaunchOutcome = .alreadyRunning
+            lastOutcome = outcome
+            return outcome
+        }
+
         guard let entry = resolveDaemonEntry() else {
-            print("[DaemonLauncher] Could not locate daemon entrypoint")
-            return
+            let outcome: DaemonLaunchOutcome = .entryNotFound
+            lastOutcome = outcome
+            print("[DaemonLauncher] \(outcome.userMessage)")
+            return outcome
         }
 
         let process = Process()
@@ -20,10 +60,27 @@ final class DaemonLauncher: @unchecked Sendable {
         do {
             try process.run()
             self.process = process
-            print("[DaemonLauncher] Started daemon pid \(process.processIdentifier)")
+            print("[DaemonLauncher] Started daemon pid \(process.processIdentifier) (bundledNode=\(entry.usedBundledNode))")
         } catch {
-            print("[DaemonLauncher] Failed to start daemon: \(error)")
+            let outcome: DaemonLaunchOutcome = .startFailed(error.localizedDescription)
+            lastOutcome = outcome
+            print("[DaemonLauncher] \(outcome.userMessage)")
+            return outcome
         }
+
+        if waitForDaemonReachable(timeoutSeconds: 5) {
+            let outcome: DaemonLaunchOutcome = .started(
+                pid: process.processIdentifier,
+                usedBundledNode: entry.usedBundledNode
+            )
+            lastOutcome = outcome
+            return outcome
+        }
+
+        let outcome: DaemonLaunchOutcome = .startedButUnreachable(pid: process.processIdentifier)
+        lastOutcome = outcome
+        print("[DaemonLauncher] \(outcome.userMessage)")
+        return outcome
     }
 
     func stop() {
@@ -60,6 +117,15 @@ final class DaemonLauncher: @unchecked Sendable {
         }
     }
 
+    private func waitForDaemonReachable(timeoutSeconds: Double) -> Bool {
+        let deadline = Date().addingTimeInterval(timeoutSeconds)
+        while Date() < deadline {
+            if isDaemonReachable() { return true }
+            Thread.sleep(forTimeInterval: 0.35)
+        }
+        return isDaemonReachable()
+    }
+
     private func isDaemonReachable() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
         var reachable = false
@@ -75,15 +141,15 @@ final class DaemonLauncher: @unchecked Sendable {
         return reachable
     }
 
-    private func resolveDaemonEntry() -> (nodePath: String, scriptPath: String, workingDirectory: URL)? {
+    private func resolveDaemonEntry() -> (nodePath: String, scriptPath: String, workingDirectory: URL, usedBundledNode: Bool)? {
         if let bundledScript = Bundle.main.url(forResource: "index", withExtension: "js", subdirectory: "Daemon/dist"),
            let bundledRoot = Bundle.main.resourceURL?.appendingPathComponent("Daemon") {
             if let bundledNode = Bundle.main.url(forResource: "node", withExtension: nil, subdirectory: "Daemon/bin"),
                FileManager.default.fileExists(atPath: bundledNode.path) {
-                return (bundledNode.path, bundledScript.path, bundledRoot)
+                return (bundledNode.path, bundledScript.path, bundledRoot, true)
             }
             if let nodePath = resolveSystemNode() {
-                return (nodePath, bundledScript.path, bundledRoot)
+                return (nodePath, bundledScript.path, bundledRoot, false)
             }
         }
 
@@ -91,7 +157,7 @@ final class DaemonLauncher: @unchecked Sendable {
             let script = URL(fileURLWithPath: devRoot).appendingPathComponent("apps/local-daemon/dist/index.js")
             if FileManager.default.fileExists(atPath: script.path),
                let nodePath = resolveSystemNode() {
-                return (nodePath, script.path, URL(fileURLWithPath: devRoot))
+                return (nodePath, script.path, URL(fileURLWithPath: devRoot), false)
             }
         }
 
@@ -99,7 +165,7 @@ final class DaemonLauncher: @unchecked Sendable {
         let script = URL(fileURLWithPath: fallbackRoot).appendingPathComponent("apps/local-daemon/dist/index.js")
         if FileManager.default.fileExists(atPath: script.path),
            let nodePath = resolveSystemNode() {
-            return (nodePath, script.path, URL(fileURLWithPath: fallbackRoot))
+            return (nodePath, script.path, URL(fileURLWithPath: fallbackRoot), false)
         }
 
         return nil

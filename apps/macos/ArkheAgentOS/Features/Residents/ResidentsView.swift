@@ -1,121 +1,89 @@
 import SwiftUI
+import WebKit
 
+// MARK: - ResidentsView
+
+/// Entry point for the Arkhe DNA tab (sidebar: "Arkhe DNA").
 struct ResidentsView: View {
+    @Environment(AppState.self) private var appState
     let daemonClient: DaemonClient
     @Bindable var store: ResidentsStore
 
+    private enum DNAMode: String, CaseIterable {
+        case helix    = "DNA Helix"
+        case residents = "Residents"
+    }
+    @State private var mode: DNAMode = .helix
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Resident Agents")
-                        .font(.largeTitle.bold())
-                    Text("Persistent specialists — wake to keep warm, sleep to save compute")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                Button("Refresh") { store.refresh(daemonClient: daemonClient) }
-            }
-            .padding(.horizontal)
-
+        VStack(spacing: 0) {
+            // ── Mode toggle header ───────────────────────────────────────
             HStack(spacing: 12) {
-                StatusChip(
-                    label: "Apple FM",
-                    value: store.appleFmAvailable ? "Ready" : "Unavailable",
-                    color: store.appleFmAvailable ? .green : .secondary
-                )
-                StatusChip(
-                    label: "Supabase",
-                    value: store.supabaseConnected ? "Synced" : store.supabaseEnabled ? "Offline" : "Disabled",
-                    color: store.supabaseConnected ? .green : .orange
-                )
-                StatusChip(
-                    label: "Active",
-                    value: "\(store.activeCount)",
-                    color: .blue
-                )
-            }
-            .padding(.horizontal)
+                Image(systemName: "waveform.path.ecg")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.cyan)
 
-            List(store.experts) { expert in
-                ResidentExpertRow(expert: expert) {
-                    if expert.status == "dormant" {
-                        daemonClient.wakeExpert(role: expert.role)
-                    } else {
-                        daemonClient.sleepExpert(role: expert.role)
+                Text("Arkhe DNA")
+                    .font(.system(size: 13, weight: .black))
+                    .foregroundStyle(.primary)
+
+                Spacer()
+
+                Picker("", selection: $mode) {
+                    ForEach(DNAMode.allCases, id: \.self) { m in
+                        Text(m.rawValue).tag(m)
                     }
                 }
+                .pickerStyle(.segmented)
+                .frame(width: 220)
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .onAppear {
-            store.refresh(daemonClient: daemonClient)
-            store.appleFmAvailable = FoundationModelService.isAvailable || daemonClient.appleFmRegistered
-            daemonClient.onExpertUpdated = { expert in
-                store.applyUpdate(expert)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(.ultraThinMaterial)
+
+            Divider()
+
+            // ── Content ─────────────────────────────────────────────────
+            switch mode {
+            case .helix:
+                AgentDNAWebPanel()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            case .residents:
+                ArkheDNAInterfaceView(daemonClient: daemonClient, store: store)
+                    .onAppear {
+                        daemonClient.onExpertUpdated = { expert in
+                            store.applyUpdate(expert)
+                        }
+                    }
             }
         }
     }
 }
 
-struct ResidentExpertRow: View {
-    let expert: ResidentExpertRecord
-    let toggle: () -> Void
+// MARK: - Agent DNA Web Panel (WKWebView embed)
 
-    private var isActive: Bool {
-        expert.status == "active" || expert.status == "busy"
+private struct AgentDNAWebPanel: NSViewRepresentable {
+    // Local Next.js dev server — update to deployed URL when available
+    private static let helixURL = URL(string: "http://localhost:3000/agent-dna-demo")!
+
+    func makeNSView(context: Context) -> WKWebView {
+        let cfg = WKWebViewConfiguration()
+        // Allow local http:// connections (localhost is ATS-exempt on macOS)
+        let wv = WKWebView(frame: .zero, configuration: cfg)
+        wv.load(URLRequest(url: Self.helixURL))
+        return wv
     }
 
-    private var layerLabel: String {
-        switch expert.preferredLayer {
-        case 1: return "Apple FM"
-        case 4: return "Cloud"
-        default: return "Ollama"
+    func updateNSView(_ webView: WKWebView, context: Context) {
+        // Reload only if the view somehow got a blank URL (e.g. tab reuse)
+        if webView.url == nil {
+            webView.load(URLRequest(url: Self.helixURL))
         }
-    }
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            Circle()
-                .fill(isActive ? Color.green : Color.secondary.opacity(0.4))
-                .frame(width: 10, height: 10)
-                .padding(.top, 4)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(expert.role)
-                    .font(.headline)
-                Text(expert.specialty)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                HStack(spacing: 8) {
-                    Text(expert.preferredModel)
-                        .font(.caption2.monospaced())
-                    Text(layerLabel)
-                        .font(.caption2)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(.quaternary)
-                        .clipShape(Capsule())
-                    Text("\(expert.activations) missions")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-
-            Spacer()
-
-            if isActive {
-                Button("Sleep", action: toggle)
-                    .buttonStyle(.bordered)
-            } else {
-                Button("Wake", action: toggle)
-                    .buttonStyle(.borderedProminent)
-            }
-        }
-        .padding(.vertical, 6)
     }
 }
+
+// MARK: - Shared row components (resident list in Settings / future surfaces)
 
 struct StatusChip: View {
     let label: String
@@ -133,44 +101,60 @@ struct StatusChip: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background(.quaternary.opacity(0.4))
+        .background(color.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 
-@Observable
-final class ResidentsStore {
-    var experts: [ResidentExpertRecord] = []
-    var appleFmAvailable = false
-    var supabaseEnabled = false
-    var supabaseConnected = false
+struct ResidentExpertRow: View {
+    let expert: ResidentExpertRecord
+    let toggle: () -> Void
 
-    var activeCount: Int {
-        experts.filter { $0.status == "active" || $0.status == "busy" }.count
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(statusColor)
+                .frame(width: 8, height: 8)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(expert.role)
+                    .font(.headline)
+                Text("\(expert.specialty) · L\(expert.preferredLayer) · \(modelLabel)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(expert.status == "dormant" ? "Wake" : "Sleep", action: toggle)
+                .controlSize(.small)
+        }
+        .padding(.vertical, 4)
     }
 
-    func refresh(daemonClient: DaemonClient) {
-        daemonClient.requestExpertList { list in
-            self.experts = list.sorted { $0.role < $1.role }
-        }
-        daemonClient.requestSupabaseStatus { status in
-            self.supabaseEnabled = status.enabled
-            self.supabaseConnected = status.connected
+    private var statusColor: Color {
+        switch expert.status {
+        case "active", "busy": return .green
+        case "dormant": return .secondary
+        default: return .orange
         }
     }
 
-    func applyUpdate(_ expert: ResidentExpertRecord) {
-        if let idx = experts.firstIndex(where: { $0.id == expert.id }) {
-            experts[idx] = expert
-        } else {
-            experts.append(expert)
-        }
+    private var modelLabel: String {
+        if expert.preferredModel.contains("ollama") { return "Ollama" }
+        if expert.preferredModel.contains("apple") { return "Apple FM" }
+        return expert.preferredModel
     }
 }
 
-struct SupabaseStatusModel: Sendable {
-    let enabled: Bool
-    let connected: Bool
-    let agentsSynced: Int
-    let memoriesSynced: Int
+struct SynapseRow: View {
+    let synapse: AgentSynapseRecord
+
+    var body: some View {
+        HStack {
+            Text("\(synapse.sourceRole) → \(synapse.targetRole)")
+                .font(.caption)
+            Spacer()
+            Text(String(format: "%.2f", synapse.weight))
+                .font(.caption.monospaced())
+                .foregroundStyle(synapse.trusted ? .yellow : .secondary)
+        }
+    }
 }

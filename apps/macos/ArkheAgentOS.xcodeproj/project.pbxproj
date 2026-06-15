@@ -7,9 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73EB61DA12B30052FEAA509F /* HermesEventFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BAF44AD6B2E108D315E666 /* HermesEventFactory.swift */; };
+		1EADEC31B4D648CD9CA2B2AC /* HermesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0902A5229A1D6CE68875469 /* HermesClient.swift */; };
+		6374A9D2F6B392B317619EB4 /* OperatingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32631153216F177A30D9E228 /* OperatingStatus.swift */; };
+		76EF789443CD95740A315A69 /* OperatingStatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD96F26CA934335F07DD1629 /* OperatingStatusHeader.swift */; };
+		14CED626259D846E356040AD /* LivingOrgMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFE175EB4E7DADF85484B2A /* LivingOrgMap.swift */; };
+		B43A2B1DCA0A43E5B1F8E5C2 /* FinancialBoards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FBF0529C147C37CE2606EC /* FinancialBoards.swift */; };
+		EBF4FACF0859DBA840FCD6C4 /* CinematicFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C731A9C91031E28A864765D /* CinematicFeed.swift */; };
+		3A964E4122606FA91FC46A87 /* DailyReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A7A9C6E337181FF39E77C /* DailyReportView.swift */; };
+		9C4D6A5D940CAD0EAFA70221 /* RollingNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7175CC23305AAD48BA166F /* RollingNumber.swift */; };
+		00A83D26E866017197FE70DC /* ArkheDNAStrandCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D963FE293F4DFB35C82BE7 /* ArkheDNAStrandCanvas.swift */; };
+		0FFCD233F8D301F8C8621890 /* CommsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79320FF76F72B502B201DA /* CommsFeedView.swift */; };
 		10987A7B7FAF42A01844AF84 /* MemoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC620A18A5C81DC40EF0A98 /* MemoryView.swift */; };
+		14E94A00CD597FA2C276867A /* ForensicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0CD999E875C139F89BC62B /* ForensicsView.swift */; };
+		194C549BFB619C25B7686924 /* ThreatsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910C8016A1C7236822926C99 /* ThreatsSection.swift */; };
 		239524F08C9536C7FD869F2F /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D848B257CC7A7FAB1202410 /* ApprovalsView.swift */; };
 		242D6B4AE696172329BB9304 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C63EC120AC61CDB1D58D2777 /* SettingsView.swift */; };
+		2C0F09FFEA93448AC123CC3C /* CompliancePackageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAB421DA0ECF9850C6EBB9C /* CompliancePackageExporter.swift */; };
 		2D978D01445CFFAD467B573C /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */; };
 		301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */; };
 		45F073F454EBE20F57C46BFF /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E35535DE52C3919E0A49BB /* SpeechRecognizer.swift */; };
@@ -17,24 +31,53 @@
 		49772DF7FAE205AB09302D07 /* ResidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D654D577D3030F18A9EA051 /* ResidentsView.swift */; };
 		51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE0555F89845483D37F1E1D /* EventModels.swift */; };
 		599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6B216F4F94C6F50A360D6 /* AppState.swift */; };
+		60778B8A645E98F3B5D8E87F /* ReplayPDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D6A6384C99502D24D1F434 /* ReplayPDFExporter.swift */; };
 		64960340B251383A163A7651 /* BrowserArtifactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */; };
 		6754BCA040886B53E580E28B /* ApprovalsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E6ADAF007BD30FBC52F1C2 /* ApprovalsStore.swift */; };
 		6756074568F3C5E9E8CCACE6 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6C4C89EA3CE1C2BE9ADE0 /* MissionsView.swift */; };
 		752C7A31E8D334E55626CE80 /* DaemonLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF786E78C2529242491F296 /* DaemonLauncher.swift */; };
+		7C3C49BC0436EA30C4FFD2C8 /* ArkheDNATheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885675FEE681307C59E5C4AA /* ArkheDNATheme.swift */; };
 		7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3034B8EAEAD5958B6102C75A /* MainWindowView.swift */; };
+		7FD899B101C34A0D854EBE20 /* AgentGraphCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B06EEC921879478A9BFFA6 /* AgentGraphCanvas.swift */; };
+		869B18F015A6DEAB6FD266AB /* StatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D2EF0B81253FD9D1BE22D5 /* StatusBanner.swift */; };
+		895F4AC20919E1CCDBA87A07 /* ArkheDNAInterfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD98572390DE18F042A99772 /* ArkheDNAInterfaceView.swift */; };
+		8E24CC97E0B901FDBAD7E4CF /* MissionControlPopoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9608F65B7007834B7FD15 /* MissionControlPopoutView.swift */; };
 		9198294BF9E3558D1C2201ED /* ReplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DC1EB88A9EED98549A2D09 /* ReplayView.swift */; };
+		945617D0D84767CF7A72F03C /* CommandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B93DE2D01A2CC0FF6AEB6 /* CommandPalette.swift */; };
+		959B9DEC796E7BAA48B5BC33 /* SystemStatusStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103CD40C4E0B5E04B498E2D4 /* SystemStatusStrip.swift */; };
 		96B158BCA6D1470F5B4F1303 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F77B0063330F1EC8DBF67F /* OnboardingView.swift */; };
 		A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74921248F80804EAC47F7EF5 /* VoiceBar.swift */; };
+		AC6C9AABFACC75AF5748D275 /* AgentGeneDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF485FB8B64ECDEE7A5E8B6 /* AgentGeneDetailPanel.swift */; };
+		ACE85041A79D83CFDCDC38B8 /* LiveAgentBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D6D9B2B2242390CDD604F /* LiveAgentBrowserView.swift */; };
+		B5452A5F172B259B3EFE6C0A /* ResidentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73A67A5298B0A040527F9A5 /* ResidentsStore.swift */; };
+		B6C407E20BD82FCA679E09A5 /* ForensicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE5D5DA59FD2923AE21F4CE /* ForensicsHelper.swift */; };
 		C056E3CC8A2A9E5E12988126 /* FoundationModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD0983A0C17CB9F7C5BDC68 /* FoundationModelService.swift */; };
 		C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */; };
+		D16B0518288B581F35ED06CA /* DNAHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B56FBF27453A9C80117719 /* DNAHubView.swift */; };
 		DA2F9913DE693CC3D3C0D109 /* ObservatoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6475A198FA16E48EA08D5F /* ObservatoryView.swift */; };
+		E1C7CBEE942EA5B467F4B3E7 /* ArkheDNAHelixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76365766D73CDE9DBFB125D6 /* ArkheDNAHelixView.swift */; };
 		E94C83FDEC5ADF1F4EA2540A /* AgentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306C718A9D29CA6231C99358 /* AgentsView.swift */; };
+		E9BEC2DA4F226AEBA2C08FD4 /* SupportConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C451B79C1C2C68236012E8 /* SupportConfig.swift */; };
+		EBEB9466C55F98BC5D0B6BCB /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A774E42342D007060084BE /* EmptyStateView.swift */; };
 		EDBA45B91EEA3E52370F697F /* RuntimeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB28237E1CD42323C1D3751 /* RuntimeModels.swift */; };
+		EEBDE41924FEA3973D596565 /* NeuralMeshCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF7E906D3E4FAF5C845D3 /* NeuralMeshCanvas.swift */; };
 		F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */; };
+		F9AAF6937D551A9BFC1774FA /* ArkheTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EDFE6AF28D5C3544F11660 /* ArkheTheme.swift */; };
 		FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E5BAF44AD6B2E108D315E666 /* HermesEventFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HermesEventFactory.swift; path = "ArkheAgentOS/Core/Models/HermesEventFactory.swift"; sourceTree = SOURCE_ROOT; };
+		A0902A5229A1D6CE68875469 /* HermesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HermesClient.swift; path = "ArkheAgentOS/Core/IPC/HermesClient.swift"; sourceTree = SOURCE_ROOT; };
+		32631153216F177A30D9E228 /* OperatingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OperatingStatus.swift; path = "ArkheAgentOS/Core/Models/OperatingStatus.swift"; sourceTree = SOURCE_ROOT; };
+		FD96F26CA934335F07DD1629 /* OperatingStatusHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OperatingStatusHeader.swift; path = "ArkheAgentOS/Features/MissionControl/OperatingStatusHeader.swift"; sourceTree = SOURCE_ROOT; };
+		9CFE175EB4E7DADF85484B2A /* LivingOrgMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LivingOrgMap.swift; path = "ArkheAgentOS/Features/MissionControl/LivingOrgMap.swift"; sourceTree = SOURCE_ROOT; };
+		03FBF0529C147C37CE2606EC /* FinancialBoards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FinancialBoards.swift; path = "ArkheAgentOS/Features/MissionControl/FinancialBoards.swift"; sourceTree = SOURCE_ROOT; };
+		5C731A9C91031E28A864765D /* CinematicFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CinematicFeed.swift; path = "ArkheAgentOS/Features/MissionControl/CinematicFeed.swift"; sourceTree = SOURCE_ROOT; };
+		D27A7A9C6E337181FF39E77C /* DailyReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailyReportView.swift; path = "ArkheAgentOS/Features/Report/DailyReportView.swift"; sourceTree = SOURCE_ROOT; };
+		2D7175CC23305AAD48BA166F /* RollingNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RollingNumber.swift; path = "ArkheAgentOS/Shared/Components/RollingNumber.swift"; sourceTree = SOURCE_ROOT; };
+		0BAB421DA0ECF9850C6EBB9C /* CompliancePackageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompliancePackageExporter.swift; sourceTree = "<group>"; };
+		103CD40C4E0B5E04B498E2D4 /* SystemStatusStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStatusStrip.swift; sourceTree = "<group>"; };
 		1CB28237E1CD42323C1D3751 /* RuntimeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeModels.swift; sourceTree = "<group>"; };
 		28A6C4C89EA3CE1C2BE9ADE0 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
 		2CD0983A0C17CB9F7C5BDC68 /* FoundationModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelService.swift; sourceTree = "<group>"; };
@@ -42,25 +85,46 @@
 		306C718A9D29CA6231C99358 /* AgentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentsView.swift; sourceTree = "<group>"; };
 		36DC1EB88A9EED98549A2D09 /* ReplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayView.swift; sourceTree = "<group>"; };
 		48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheAgentOSApp.swift; sourceTree = "<group>"; };
+		4D79320FF76F72B502B201DA /* CommsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommsFeedView.swift; sourceTree = "<group>"; };
+		51D963FE293F4DFB35C82BE7 /* ArkheDNAStrandCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheDNAStrandCanvas.swift; sourceTree = "<group>"; };
 		5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserArtifactsView.swift; sourceTree = "<group>"; };
 		57E35535DE52C3919E0A49BB /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		5D848B257CC7A7FAB1202410 /* ApprovalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsView.swift; sourceTree = "<group>"; };
+		5F7D6D9B2B2242390CDD604F /* LiveAgentBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveAgentBrowserView.swift; sourceTree = "<group>"; };
+		63B9608F65B7007834B7FD15 /* MissionControlPopoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlPopoutView.swift; sourceTree = "<group>"; };
 		6CC620A18A5C81DC40EF0A98 /* MemoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryView.swift; sourceTree = "<group>"; };
 		70624744DB8C4DDFA8457D31 /* ArkheAgentOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ArkheAgentOS.entitlements; sourceTree = "<group>"; };
 		74921248F80804EAC47F7EF5 /* VoiceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceBar.swift; sourceTree = "<group>"; };
+		76365766D73CDE9DBFB125D6 /* ArkheDNAHelixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheDNAHelixView.swift; sourceTree = "<group>"; };
+		76BCF7E906D3E4FAF5C845D3 /* NeuralMeshCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuralMeshCanvas.swift; sourceTree = "<group>"; };
 		7D654D577D3030F18A9EA051 /* ResidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsView.swift; sourceTree = "<group>"; };
 		803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		86A774E42342D007060084BE /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		8726A82C6510A68C67BBF364 /* ArkheAgentOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArkheAgentOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		885675FEE681307C59E5C4AA /* ArkheDNATheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheDNATheme.swift; sourceTree = "<group>"; };
 		89A6B216F4F94C6F50A360D6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		8E3B93DE2D01A2CC0FF6AEB6 /* CommandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandPalette.swift; sourceTree = "<group>"; };
+		910C8016A1C7236822926C99 /* ThreatsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreatsSection.swift; sourceTree = "<group>"; };
+		93B56FBF27453A9C80117719 /* DNAHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNAHubView.swift; sourceTree = "<group>"; };
+		97C451B79C1C2C68236012E8 /* SupportConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportConfig.swift; sourceTree = "<group>"; };
 		A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlViewModel.swift; sourceTree = "<group>"; };
+		AD98572390DE18F042A99772 /* ArkheDNAInterfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheDNAInterfaceView.swift; sourceTree = "<group>"; };
+		B0EDFE6AF28D5C3544F11660 /* ArkheTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkheTheme.swift; sourceTree = "<group>"; };
 		BD34A27D6B365EFA64E588E5 /* DaemonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonClient.swift; sourceTree = "<group>"; };
+		BF0CD999E875C139F89BC62B /* ForensicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForensicsView.swift; sourceTree = "<group>"; };
+		C3D6A6384C99502D24D1F434 /* ReplayPDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayPDFExporter.swift; sourceTree = "<group>"; };
 		C63EC120AC61CDB1D58D2777 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C73A67A5298B0A040527F9A5 /* ResidentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsStore.swift; sourceTree = "<group>"; };
 		CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlView.swift; sourceTree = "<group>"; };
+		CCF485FB8B64ECDEE7A5E8B6 /* AgentGeneDetailPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentGeneDetailPanel.swift; sourceTree = "<group>"; };
 		CDE0555F89845483D37F1E1D /* EventModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModels.swift; sourceTree = "<group>"; };
 		CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
 		DA6475A198FA16E48EA08D5F /* ObservatoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservatoryView.swift; sourceTree = "<group>"; };
+		E4D2EF0B81253FD9D1BE22D5 /* StatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBanner.swift; sourceTree = "<group>"; };
 		EAF786E78C2529242491F296 /* DaemonLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonLauncher.swift; sourceTree = "<group>"; };
+		EDE5D5DA59FD2923AE21F4CE /* ForensicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForensicsHelper.swift; sourceTree = "<group>"; };
 		F2F77B0063330F1EC8DBF67F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		F3B06EEC921879478A9BFFA6 /* AgentGraphCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentGraphCanvas.swift; sourceTree = "<group>"; };
 		F8E6ADAF007BD30FBC52F1C2 /* ApprovalsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				BBE73B73781966A5525F4D10 /* Components */,
+				E0A6C4BE1CD4D93B42E8CBC8 /* Theme */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -79,6 +144,8 @@
 				412197BC08A1B00CC95EA17B /* Agents */,
 				0F75D4F83134E1B723EAFD19 /* Approvals */,
 				87E67070EA7DB2E677210821 /* Browser */,
+				0B8049A2B42FB0452802958F /* DNA */,
+				AA21EC122CCE9870F01549C1 /* Forensics */,
 				A0DC4FA151B3B2D68844D5AD /* Memory */,
 				E66494229B504D70A6354FE0 /* MissionControl */,
 				97138813B2FEAB846F83F1E2 /* Missions */,
@@ -89,6 +156,19 @@
 				29A75BF7D858DEDE32C5E9DA /* Voice */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		0B8049A2B42FB0452802958F /* DNA */ = {
+			isa = PBXGroup;
+			children = (
+				CCF485FB8B64ECDEE7A5E8B6 /* AgentGeneDetailPanel.swift */,
+				76365766D73CDE9DBFB125D6 /* ArkheDNAHelixView.swift */,
+				AD98572390DE18F042A99772 /* ArkheDNAInterfaceView.swift */,
+				51D963FE293F4DFB35C82BE7 /* ArkheDNAStrandCanvas.swift */,
+				885675FEE681307C59E5C4AA /* ArkheDNATheme.swift */,
+				93B56FBF27453A9C80117719 /* DNAHubView.swift */,
+			);
+			path = DNA;
 			sourceTree = "<group>";
 		};
 		0F75D4F83134E1B723EAFD19 /* Approvals */ = {
@@ -146,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				CEA4ADB191DB44049554EBB9 /* SupabaseConfig.swift */,
+				97C451B79C1C2C68236012E8 /* SupportConfig.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -163,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				5738E14FBA10ACD72334F52A /* BrowserArtifactsView.swift */,
+				5F7D6D9B2B2242390CDD604F /* LiveAgentBrowserView.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -194,6 +276,15 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		AA21EC122CCE9870F01549C1 /* Forensics */ = {
+			isa = PBXGroup;
+			children = (
+				EDE5D5DA59FD2923AE21F4CE /* ForensicsHelper.swift */,
+				BF0CD999E875C139F89BC62B /* ForensicsView.swift */,
+			);
+			path = Forensics;
+			sourceTree = "<group>";
+		};
 		AC3923414260F87C3FA745D7 /* IPC */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,7 +296,11 @@
 		BBE73B73781966A5525F4D10 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8E3B93DE2D01A2CC0FF6AEB6 /* CommandPalette.swift */,
+				86A774E42342D007060084BE /* EmptyStateView.swift */,
 				803EFB2F2BF85647D6CA15C9 /* SidebarView.swift */,
+				E4D2EF0B81253FD9D1BE22D5 /* StatusBanner.swift */,
+				103CD40C4E0B5E04B498E2D4 /* SystemStatusStrip.swift */,
 				74921248F80804EAC47F7EF5 /* VoiceBar.swift */,
 			);
 			path = Components;
@@ -239,6 +334,15 @@
 		D80B52AF6438A8C1E261C5EF /* ArkheAgentOS */ = {
 			isa = PBXGroup;
 			children = (
+				E5BAF44AD6B2E108D315E666 /* HermesEventFactory.swift */,
+				A0902A5229A1D6CE68875469 /* HermesClient.swift */,
+				32631153216F177A30D9E228 /* OperatingStatus.swift */,
+				FD96F26CA934335F07DD1629 /* OperatingStatusHeader.swift */,
+				9CFE175EB4E7DADF85484B2A /* LivingOrgMap.swift */,
+				03FBF0529C147C37CE2606EC /* FinancialBoards.swift */,
+				5C731A9C91031E28A864765D /* CinematicFeed.swift */,
+				D27A7A9C6E337181FF39E77C /* DailyReportView.swift */,
+				2D7175CC23305AAD48BA166F /* RollingNumber.swift */,
 				70624744DB8C4DDFA8457D31 /* ArkheAgentOS.entitlements */,
 				48EC1B61325BAEEFB0346DE2 /* ArkheAgentOSApp.swift */,
 				266A1B180E2EF36412DBD29C /* App */,
@@ -249,11 +353,23 @@
 			path = ArkheAgentOS;
 			sourceTree = "<group>";
 		};
+		E0A6C4BE1CD4D93B42E8CBC8 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				B0EDFE6AF28D5C3544F11660 /* ArkheTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		E66494229B504D70A6354FE0 /* MissionControl */ = {
 			isa = PBXGroup;
 			children = (
+				F3B06EEC921879478A9BFFA6 /* AgentGraphCanvas.swift */,
+				4D79320FF76F72B502B201DA /* CommsFeedView.swift */,
+				63B9608F65B7007834B7FD15 /* MissionControlPopoutView.swift */,
 				CBC1F696F9F7C41BFD766404 /* MissionControlView.swift */,
 				A9A68C820FB8A5D3DEC1B3D1 /* MissionControlViewModel.swift */,
+				910C8016A1C7236822926C99 /* ThreatsSection.swift */,
 			);
 			path = MissionControl;
 			sourceTree = "<group>";
@@ -261,6 +377,8 @@
 		EC3F44CC2C9B2EB2C0085375 /* Residents */ = {
 			isa = PBXGroup;
 			children = (
+				76BCF7E906D3E4FAF5C845D3 /* NeuralMeshCanvas.swift */,
+				C73A67A5298B0A040527F9A5 /* ResidentsStore.swift */,
 				7D654D577D3030F18A9EA051 /* ResidentsView.swift */,
 			);
 			path = Residents;
@@ -269,6 +387,8 @@
 		FE6F81A57D8D48141B60C505 /* Replay */ = {
 			isa = PBXGroup;
 			children = (
+				0BAB421DA0ECF9850C6EBB9C /* CompliancePackageExporter.swift */,
+				C3D6A6384C99502D24D1F434 /* ReplayPDFExporter.swift */,
 				36DC1EB88A9EED98549A2D09 /* ReplayView.swift */,
 			);
 			path = Replay;
@@ -329,30 +449,62 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73EB61DA12B30052FEAA509F /* HermesEventFactory.swift in Sources */,
+				1EADEC31B4D648CD9CA2B2AC /* HermesClient.swift in Sources */,
+				6374A9D2F6B392B317619EB4 /* OperatingStatus.swift in Sources */,
+				76EF789443CD95740A315A69 /* OperatingStatusHeader.swift in Sources */,
+				14CED626259D846E356040AD /* LivingOrgMap.swift in Sources */,
+				B43A2B1DCA0A43E5B1F8E5C2 /* FinancialBoards.swift in Sources */,
+				EBF4FACF0859DBA840FCD6C4 /* CinematicFeed.swift in Sources */,
+				3A964E4122606FA91FC46A87 /* DailyReportView.swift in Sources */,
+				9C4D6A5D940CAD0EAFA70221 /* RollingNumber.swift in Sources */,
+				AC6C9AABFACC75AF5748D275 /* AgentGeneDetailPanel.swift in Sources */,
+				7FD899B101C34A0D854EBE20 /* AgentGraphCanvas.swift in Sources */,
 				E94C83FDEC5ADF1F4EA2540A /* AgentsView.swift in Sources */,
 				599C09335A6EB8057D60F7E2 /* AppState.swift in Sources */,
 				6754BCA040886B53E580E28B /* ApprovalsStore.swift in Sources */,
 				239524F08C9536C7FD869F2F /* ApprovalsView.swift in Sources */,
 				FF5A212C92B77B765DD3C6BB /* ArkheAgentOSApp.swift in Sources */,
+				E1C7CBEE942EA5B467F4B3E7 /* ArkheDNAHelixView.swift in Sources */,
+				895F4AC20919E1CCDBA87A07 /* ArkheDNAInterfaceView.swift in Sources */,
+				00A83D26E866017197FE70DC /* ArkheDNAStrandCanvas.swift in Sources */,
+				7C3C49BC0436EA30C4FFD2C8 /* ArkheDNATheme.swift in Sources */,
+				F9AAF6937D551A9BFC1774FA /* ArkheTheme.swift in Sources */,
 				64960340B251383A163A7651 /* BrowserArtifactsView.swift in Sources */,
+				945617D0D84767CF7A72F03C /* CommandPalette.swift in Sources */,
+				0FFCD233F8D301F8C8621890 /* CommsFeedView.swift in Sources */,
+				2C0F09FFEA93448AC123CC3C /* CompliancePackageExporter.swift in Sources */,
+				D16B0518288B581F35ED06CA /* DNAHubView.swift in Sources */,
 				301A1DBD98476CC58AF72249 /* DaemonClient.swift in Sources */,
 				752C7A31E8D334E55626CE80 /* DaemonLauncher.swift in Sources */,
+				EBEB9466C55F98BC5D0B6BCB /* EmptyStateView.swift in Sources */,
 				51C2ED9034E9D7477FE0D524 /* EventModels.swift in Sources */,
+				B6C407E20BD82FCA679E09A5 /* ForensicsHelper.swift in Sources */,
+				14E94A00CD597FA2C276867A /* ForensicsView.swift in Sources */,
 				C056E3CC8A2A9E5E12988126 /* FoundationModelService.swift in Sources */,
+				ACE85041A79D83CFDCDC38B8 /* LiveAgentBrowserView.swift in Sources */,
 				7D6B8F9589E9E2FDE3DDC0C2 /* MainWindowView.swift in Sources */,
 				10987A7B7FAF42A01844AF84 /* MemoryView.swift in Sources */,
+				8E24CC97E0B901FDBAD7E4CF /* MissionControlPopoutView.swift in Sources */,
 				F017C07D0ED6892C33EE4B1C /* MissionControlView.swift in Sources */,
 				47670BBAB3221F8DF9A9465F /* MissionControlViewModel.swift in Sources */,
 				6756074568F3C5E9E8CCACE6 /* MissionsView.swift in Sources */,
+				EEBDE41924FEA3973D596565 /* NeuralMeshCanvas.swift in Sources */,
 				DA2F9913DE693CC3D3C0D109 /* ObservatoryView.swift in Sources */,
 				96B158BCA6D1470F5B4F1303 /* OnboardingView.swift in Sources */,
+				60778B8A645E98F3B5D8E87F /* ReplayPDFExporter.swift in Sources */,
 				9198294BF9E3558D1C2201ED /* ReplayView.swift in Sources */,
+				B5452A5F172B259B3EFE6C0A /* ResidentsStore.swift in Sources */,
 				49772DF7FAE205AB09302D07 /* ResidentsView.swift in Sources */,
 				EDBA45B91EEA3E52370F697F /* RuntimeModels.swift in Sources */,
 				242D6B4AE696172329BB9304 /* SettingsView.swift in Sources */,
 				C8879ABF0EE201FF8D8BC801 /* SidebarView.swift in Sources */,
 				45F073F454EBE20F57C46BFF /* SpeechRecognizer.swift in Sources */,
+				869B18F015A6DEAB6FD266AB /* StatusBanner.swift in Sources */,
 				2D978D01445CFFAD467B573C /* SupabaseConfig.swift in Sources */,
+				E9BEC2DA4F226AEBA2C08FD4 /* SupportConfig.swift in Sources */,
+				959B9DEC796E7BAA48B5BC33 /* SystemStatusStrip.swift in Sources */,
+				194C549BFB619C25B7686924 /* ThreatsSection.swift in Sources */,
 				A7E953222D6E713DCCD4344B /* VoiceBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

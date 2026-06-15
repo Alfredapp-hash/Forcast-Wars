@@ -1,0 +1,43 @@
+{
+  "name": "@arkhe/hermes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hermes message routing service for Arkhe AgentOS",
+  "scripts": {
+    "dev": "nest start --watch",
+    "start": "node dist/main.js",
+    "build": "nest build",
+    "lint": "eslint --ext .ts src",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/terminus": "^11.1.1",
+    "@nestjs/platform-ws": "^11.0.0",
+    "@nestjs/websockets": "^11.0.0",
+    "reflect-metadata": "^0.2.2",
+    "@supabase/supabase-js": "^2.45.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "nats": "^2.29.3",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@types/node": "^22.15.21",
+    "@types/ws": "^8.18.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vitest": "^1.6.0"
+  }
+}

@@ -2,19 +2,22 @@ import SwiftUI
 import Charts
 
 struct MissionControlView: View {
+    @Environment(AppState.self) private var appState
+    @Environment(\.openWindow) private var openWindow
     let daemonClient: DaemonClient
     @Bindable var viewModel: MissionControlViewModel
     @State private var showKillConfirm = false
 
     var body: some View {
         VStack(spacing: 0) {
-            header
+            OperatingStatusHeader(status: appState.operatingStatus)
+            controlBar
             Divider()
             HSplitView {
                 activeMissionsPanel
                     .frame(minWidth: 240, idealWidth: 280)
-                agentHierarchyPanel
-                    .frame(minWidth: 360)
+                dnaCenterPanel
+                    .frame(minWidth: 480, idealWidth: 560)
                 telemetryPanel
                     .frame(minWidth: 260, idealWidth: 300)
             }
@@ -24,6 +27,9 @@ struct MissionControlView: View {
                 .frame(height: 220)
         }
         .background(Color(nsColor: .windowBackgroundColor))
+        .onAppear {
+            appState.residentsStore.refresh(daemonClient: daemonClient)
+        }
         .confirmationDialog("Kill all agents?", isPresented: $showKillConfirm) {
             Button("Kill Everything", role: .destructive) {
                 daemonClient.sendKillSwitch()
@@ -35,20 +41,51 @@ struct MissionControlView: View {
         }
     }
 
-    private var header: some View {
-        HStack {
-            Text("MISSION CONTROL")
-                .font(.system(.title3, design: .default, weight: .semibold))
-            Circle()
-                .fill(.green)
-                .frame(width: 8, height: 8)
-            Text("Live")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+    private var controlBar: some View {
+        HStack(spacing: 10) {
+            if viewModel.activeDebateMissions > 0 {
+                Label("\(viewModel.activeDebateMissions) live debates", systemImage: "swords")
+                    .font(.caption2.bold())
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 1)
+                    .background(Color.cyan.opacity(0.15))
+                    .clipShape(Capsule())
+                    .foregroundStyle(.cyan)
+            }
+            if viewModel.contentQueueDepth > 0 {
+                Label("\(viewModel.contentQueueDepth) content", systemImage: "doc.text")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            if viewModel.resolutionQueueDepth > 0 {
+                Label("\(viewModel.resolutionQueueDepth) resolutions", systemImage: "gavel")
+                    .font(.caption2)
+                    .foregroundStyle(.orange)
+            }
+            if viewModel.attentionScanActive {
+                Text("ATTN SCAN")
+                    .font(.caption2.bold())
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 1)
+                    .background(Color.blue.opacity(0.15))
+                    .clipShape(Capsule())
+                    .foregroundStyle(.blue)
+            }
             Spacer()
-            Button("Pause Stream") {
+            Button {
+                openWindow(id: "mission-control-popout")
+            } label: {
+                Image(systemName: "rectangle.split.2x1")
+            }
+            .help("Pop out Mission Control to a separate window")
+            Button(viewModel.streamPaused ? "Resume Stream" : "Pause Stream") {
                 viewModel.streamPaused.toggle()
             }
+            .foregroundStyle(viewModel.streamPaused ? .orange : .secondary)
+            Button("Attention Scan") {
+                daemonClient.triggerAttentionScan()
+            }
+            .buttonStyle(.bordered)
             Button("Kill Switch") {
                 showKillConfirm = true
             }
@@ -56,7 +93,7 @@ struct MissionControlView: View {
             .tint(.red)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.vertical, 6)
     }
 
     private var activeMissionsPanel: some View {
@@ -67,14 +104,23 @@ struct MissionControlView: View {
                 .padding(.horizontal, 12)
 
             if viewModel.missions.isEmpty {
-                emptyHint("No active missions.\nSay \"Director, create a mission\".")
+                VStack(alignment: .leading, spacing: 12) {
+                    emptyHint("No active missions.\nUse the Director bar at the bottom — type a command and press Send or Enter.")
+                }
             } else {
                 ScrollView {
                     VStack(spacing: 8) {
                         ForEach(viewModel.missions) { mission in
-                            MissionCardView(mission: mission) {
-                                daemonClient.pauseMission(missionId: mission.id)
-                            }
+                            MissionCardView(
+                                mission: mission,
+                                onPause: {
+                                    daemonClient.pauseMission(missionId: mission.id)
+                                },
+                                isFocused: viewModel.focusedMissionId == mission.id,
+                                onFocus: {
+                                    viewModel.setFocus(missionId: viewModel.focusedMissionId == mission.id ? nil : mission.id)
+                                }
+                            )
                         }
                     }
                     .padding(.horizontal, 12)
@@ -84,87 +130,72 @@ struct MissionControlView: View {
         .padding(.vertical, 12)
     }
 
-    private var agentHierarchyPanel: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("AGENT HIERARCHY")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 12)
-
-            if viewModel.agents.isEmpty {
-                emptyHint("No agents running.")
-            } else {
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
-                        ForEach(viewModel.agents) { agent in
-                            AgentNodeView(agent: agent)
-                        }
-                    }
-                    .padding(.horizontal, 12)
+    private var dnaCenterPanel: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text("LIVING ORG MAP")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Text("· tasks animate in real time")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                Spacer()
+                Button("DNA Tab") {
+                    appState.selectedTab = .residents
                 }
+                .controlSize(.small)
             }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+
+            LivingOrgMap(
+                agents: viewModel.agents,
+                recentEvents: viewModel.recentEvents
+            )
+            .frame(maxHeight: .infinity)
+
+            CommsFeedView(comms: viewModel.focusedComms)
+                .frame(height: 88)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 8)
         }
-        .padding(.vertical, 12)
     }
 
     private var telemetryPanel: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("TELEMETRY")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                RevenueBoardView(status: appState.operatingStatus)
+                CostBoardView(status: appState.operatingStatus)
 
-            MetricTile(label: "Active Agents", value: "\(viewModel.activeAgentCount)")
-            MetricTile(label: "Cost Today", value: String(format: "$%.2f", viewModel.totalCostToday))
-            MetricTile(label: "Pending Approvals", value: "\(viewModel.pendingApprovals)")
-            MetricTile(label: "Daemon Memory", value: String(format: "%.0f MB", viewModel.daemonMemoryMb))
-            MetricTile(label: "Work Items", value: "\(viewModel.workItemsAssigned)")
-            MetricTile(label: "Last Model Route", value: viewModel.lastModelRoute)
+                BoardSectionHeader("SYSTEM")
+                MetricTile(label: "Pending Approvals", value: "\(viewModel.pendingApprovals)")
+                MetricTile(label: "Daemon Memory", value: String(format: "%.0f MB", viewModel.daemonMemoryMb))
+                MetricTile(label: "Last Model Route", value: viewModel.lastModelRoute)
 
-            if !viewModel.agents.isEmpty {
-                Chart(viewModel.agents) { agent in
-                    BarMark(
-                        x: .value("Agent", agent.role),
-                        y: .value("CPU", agent.cpuPct)
-                    )
-                    .foregroundStyle(by: .value("Agent", agent.role))
-                }
-                .chartLegend(.hidden)
-                .frame(height: 120)
+                ThreatsSection(
+                    pendingApprovals: viewModel.pendingApprovals,
+                    highBudgetMissions: viewModel.missions.filter { $0.budgetUsedUsd / max($0.budgetUsd, 1) > 0.8 }
+                )
+
+                AttentionCortexStrip(
+                    signals: Array(viewModel.attentionSignals.prefix(5)),
+                    scanActive: viewModel.attentionScanActive
+                )
             }
-
-            Spacer()
+            .padding(12)
         }
-        .padding(12)
     }
 
     private var eventStreamPanel: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("EVENT STREAM")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Spacer()
-                if viewModel.streamPaused {
-                    Text("PAUSED")
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.orange)
-                }
-            }
-            .padding(.horizontal, 12)
-            .padding(.top, 8)
-
-            if viewModel.eventLog.isEmpty {
-                emptyHint("Waiting for events from daemon…")
-                    .frame(maxWidth: .infinity)
-            } else {
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 2) {
-                        ForEach(viewModel.eventLog) { row in
-                            EventLogRowView(row: row)
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                }
+        CinematicFeedView(
+            rows: viewModel.eventLog,
+            paused: viewModel.streamPaused
+        ) { row in
+            if let event = viewModel.event(forLogId: row.id) {
+                appState.presentForensics(
+                    focusEvent: event,
+                    allEvents: viewModel.recentEvents
+                )
             }
         }
     }
@@ -182,6 +213,8 @@ struct MissionControlView: View {
 struct MissionCardView: View {
     let mission: MissionCardModel
     var onPause: (() -> Void)?
+    var isFocused: Bool = false
+    var onFocus: (() -> Void)?   // Premium: tapping the card focuses the hierarchy + comms
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -205,8 +238,15 @@ struct MissionCardView: View {
             .font(.caption)
         }
         .padding(10)
-        .background(.quaternary.opacity(0.4))
+        .background(isFocused ? Color.accentColor.opacity(0.12) : Color.secondary.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isFocused ? Color.accentColor : Color.clear, lineWidth: 1.5)
+        )
+        .onTapGesture {
+            onFocus?()
+        }
     }
 }
 
@@ -288,5 +328,70 @@ struct EventLogRowView: View {
             Text(row.status)
                 .font(.caption)
         }
+    }
+}
+
+/// Dedicated ATTENTION CORTEX live strip (under telemetry or next to Threats).
+/// Shows last few signals with nice formatting and opportunityScore badges (green>80, orange>60).
+struct AttentionCortexStrip: View {
+    let signals: [AttentionSignal]
+    let scanActive: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 6) {
+                Text("ATTENTION CORTEX")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                if scanActive {
+                    Text("SCANNING…")
+                        .font(.caption2.bold())
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(Color.blue.opacity(0.2))
+                        .clipShape(Capsule())
+                        .foregroundStyle(.blue)
+                }
+                Spacer()
+            }
+
+            if signals.isEmpty {
+                Text("No attention signals yet. Use ⌘K → 'Scan for Attention Opportunities' or the header button.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(alignment: .leading, spacing: 2) {
+                    ForEach(signals) { sig in
+                        HStack(spacing: 6) {
+                            Text(sig.eventType.replacingOccurrences(of: "attention.", with: "").replacingOccurrences(of: "analytics.media.", with: "analytics."))
+                                .font(.caption2.monospaced())
+                                .foregroundStyle(.secondary)
+                                .frame(width: 110, alignment: .leading)
+
+                            Text(sig.summary)
+                                .font(.caption2)
+                                .lineLimit(1)
+
+                            if let sc = sig.score {
+                                scoreBadge(for: sc)
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            }
+        }
+        .padding(8)
+        .background(Color.secondary.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+
+    private func scoreBadge(for score: Double) -> some View {
+        let color: Color = score > 80 ? .green : (score >= 60 ? .orange : .secondary)
+        return Text(String(format: " %0.0f ", score))
+            .font(.caption2.bold())
+            .foregroundStyle(color)
+            .background(color.opacity(0.15))
+            .clipShape(Capsule())
     }
 }

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" fill="none">
+  <defs>
+    <linearGradient id="blade-a" x1="4" y1="42" x2="22" y2="8" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="blade-b" x1="44" y1="42" x2="26" y2="8" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c4b5fd"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="horizon" x1="2" y1="38" x2="46" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06b6d4" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#06b6d4" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(24 19) rotate(90) scale(6)">
+      <stop stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wars-text" x1="120" y1="12" x2="220" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark -->
+  <path d="M 8 37.5 Q 24 31 40 37.5" stroke="url(#horizon)" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M 11 40 L 22.5 9.5 L 25 11 L 13.5 40 Z" fill="url(#blade-a)"/>
+  <path d="M 9 36 L 20 12" stroke="url(#blade-a)" stroke-width="2.25" stroke-linecap="round"/>
+  <path d="M 37 40 L 25.5 9.5 L 23 11 L 34.5 40 Z" fill="url(#blade-b)"/>
+  <path d="M 39 36 L 28 12" stroke="url(#blade-b)" stroke-width="2.25" stroke-linecap="round"/>
+  <rect x="20" y="33" width="8" height="2.5" rx="1.25" fill="#0f172a" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+  <circle cx="24" cy="19" r="3.25" fill="url(#core)"/>
+  <circle cx="24" cy="19" r="1.25" fill="#f0fdff"/>
+  <!-- Wordmark -->
+  <text x="56" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#f8fafc" letter-spacing="-0.02em">Forecast </text>
+  <text x="152" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="url(#wars-text)" letter-spacing="-0.02em">Wars</text>
+</svg>

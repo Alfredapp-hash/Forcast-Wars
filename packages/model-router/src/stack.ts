@@ -30,6 +30,18 @@ const LAYER_2_TASKS = new Set<ModelTaskClass>([
   "extract_facts",
   "draft_report",
   "choose_next_tool",
+  "debate_fact_check",
+  "content_caption",
+  "content_summary",
+  "debate_narrate",
+]);
+
+/** Layer 4 — Premium cloud: complex debate reasoning */
+const LAYER_4_TASKS = new Set<ModelTaskClass>([
+  "debate_opening",
+  "debate_rebuttal",
+  "debate_judge",
+  "debate_resolve",
 ]);
 
 /** Resident expert roles map to preferred Ollama models */
@@ -48,7 +60,14 @@ export const EXPERT_MODEL_PREFERENCES: Record<string, string> = {
 };
 
 /** Cloud escalation triggers */
-const CLOUD_TASKS = new Set<ModelTaskClass>(["plan_mission", "draft_report"]);
+const CLOUD_TASKS = new Set<ModelTaskClass>([
+  "plan_mission",
+  "draft_report",
+  "debate_opening",
+  "debate_rebuttal",
+  "debate_judge",
+  "debate_resolve",
+]);
 const CODING_ROLES = new Set(["Coding Agent", "Coding Expert"]);
 
 export interface StackRouteInput {
@@ -80,6 +99,7 @@ export function planStackRoute(input: StackRouteInput): StackRoutePlan {
   const needsDeepReasoning =
     input.requiresHighReasoning ||
     input.taskClass === "plan_mission" ||
+    LAYER_4_TASKS.has(input.taskClass) ||
     needsCoding ||
     inputLength > 4000;
 

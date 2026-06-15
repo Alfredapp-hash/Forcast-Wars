@@ -320,6 +320,42 @@ RESIDENT EXPERTS
 └──────────────┘ └──────────────┘ └──────────────┘
 ```
 
+### Arkhe DNA Interface (primary organism view)
+
+**Canonical spec:** `docs/DNA_INTERFACE.md`
+
+The **Arkhe DNA** tab is the central identity and navigation surface — not a decorative sidebar widget.
+
+Three layers stay **separate**:
+
+| Layer | Surface | Role |
+|-------|---------|------|
+| **Arkhe DNA** | `Arkhe DNA` tab | Strand, chromosomes, genes, evolution |
+| **Neural Mesh** | Live Mesh toggle on DNA + Mission Control comms | Real-time collaboration traffic |
+| **Activity Monitor** | Observatory | CPU, tokens, cost, model routes |
+
+#### Visual rules
+
+| Visual | Meaning |
+|--------|---------|
+| Dark metallic spine | Base DNA strand |
+| Chromosome band | Agent family (Executive, Personal, Development, …) |
+| Gene segment | Individual agent — Arkhe color by family |
+| Dim segment | Dormant agent |
+| Pulsing segment | Active / busy agent |
+| Live Mesh overlay | Synapse energy paths (cyan/gold) — **not** merged into strand identity |
+
+#### Interaction
+
+- **Click gene** → Agent Gene Detail Panel (status, model, express/sleep, forensics, link to Activity Monitor)
+- **Live Mesh toggle** → collaboration overlay on strand
+- **Zoom** → +/- on strand canvas
+- **Evolution bar** → proposed new genes from Neural Mesh learning
+
+Mission Control handles **mission execution**; DNA handles **what Arkhe is**.
+
+Legacy Residents list UI is retired in favor of strand navigation. See `ArkheDNAInterfaceView`, `ArkheDNAStrandCanvas`, `AgentGeneDetailPanel`.
+
 ---
 
 ## Screen 4: Agent Browser
@@ -625,12 +661,12 @@ Every screen needs a purposeful empty state with voice hint:
 | Mission Control | Active missions + agent tree + event stream + kill switch |
 | Missions | List + detail overview + timeline |
 | Agents | List + profile + kill |
-| Browser | User mode only + agent overlay stub |
-| Replay | Playwright trace step-through; no video yet |
-| Observatory | CPU + memory + cost charts only |
-| Approvals | Queue + review modal |
-| Memory | Search stub |
-| Forensics | Static evidence chain from events |
+| Browser | Live dual-mode WKWebView + artifacts viewer; in-browser approvals (Premium) |
+| Replay | Step-through + timeline scrubber, markers, educational narration, JSON export |
+| Observatory | CPU + memory + cost charts + AI Resource Manager |
+| Approvals | Queue + review modal + global banner |
+| Memory | Local/vault search, MEMORIES.md, dreaming, audit export; click → forensics |
+| Forensics | Evidence chain sheet from Agent/Replay/Memory/Mission Control; export package |
 | Settings | Voice + budgets + recording mode |
 
 ---

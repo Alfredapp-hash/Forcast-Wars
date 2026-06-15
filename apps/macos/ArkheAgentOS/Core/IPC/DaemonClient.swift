@@ -3,6 +3,7 @@ import Foundation
 final class DaemonClient: @unchecked Sendable {
     var onEvent: ((EventStreamMessage) -> Void)?
     var onConnectionChange: ((Bool) -> Void)?
+    var onReconnectingChange: ((Bool) -> Void)?
     var onMemorySearchResults: (([ArkheEvent]) -> Void)?
     var onReplayMission: ((String, [ArkheEvent]) -> Void)?
     var onExportAudit: (([ArkheEvent]) -> Void)?
@@ -16,7 +17,13 @@ final class DaemonClient: @unchecked Sendable {
     private var pendingHealth: ((HealthStatus) -> Void)?
     private var pendingVaultSearch: (([VaultMemoryRecord]) -> Void)?
     private var pendingRuntimeSettings: ((RuntimeSettingsModel) -> Void)?
+    private var pendingAttentionConfig: ((AttentionConfigModel) -> Void)?
+    private var pendingDocumentaryConfig: ((DocumentaryConfigModel, DocumentaryStatusModel?) -> Void)?
+    private var pendingMemoriesRead: ((String) -> Void)?
+    private var pendingDreamingStatus: ((DreamingStatusModel) -> Void)?
     private var webSocketTask: URLSessionWebSocketTask?
+    private var reconnectAttempt: Int = 0
+    private(set) var isReconnecting = false
     private let session = URLSession(configuration: .default)
     private let wsURL = URL(string: "ws://127.0.0.1:9470")!
     private var isConnected = false
@@ -122,6 +129,27 @@ final class DaemonClient: @unchecked Sendable {
         sendJSON(["type": "vault_search", "payload": ["query": query]])
     }
 
+    func readHumanMemories(completion: ((String) -> Void)? = nil) {
+        pendingMemoriesRead = completion
+        sendJSON(["type": "memories_read"])
+    }
+
+    func writeHumanMemories(markdown: String, completion: ((String) -> Void)? = nil) {
+        pendingMemoriesRead = completion
+        sendJSON(["type": "memories_write", "payload": ["markdown": markdown]])
+    }
+
+    func dreamNow(completion: ((DreamingStatusModel) -> Void)? = nil) {
+        pendingDreamingStatus = completion
+        sendJSON(["type": "dream_now"])
+    }
+
+    /// Triggers the full Attention Cortex autonomous media loop (trend scan → opportunity → content → video (stub) → publish → analytics).
+    /// This is the "manufacture attention" entry point. The daemon emits attention.* and trend.* events that appear in Mission Control comms and can strengthen Neural Mesh synapses.
+    func triggerAttentionScan() {
+        sendJSON(["type": "attention_scan"])
+    }
+
     func requestRuntimeSettings(completion: ((RuntimeSettingsModel) -> Void)? = nil) {
         pendingRuntimeSettings = completion
         sendJSON(["type": "runtime_settings"])
@@ -136,6 +164,73 @@ final class DaemonClient: @unchecked Sendable {
                 "maxMissionBudgetUsd": maxMissionBudgetUsd,
                 "paidCloudEnabled": paidCloudEnabled,
             ],
+        ])
+    }
+
+    func requestAttentionConfig(completion: ((AttentionConfigModel) -> Void)? = nil) {
+        pendingAttentionConfig = completion
+        sendJSON(["type": "attention_config"])
+    }
+
+    func requestDocumentaryConfig(completion: ((DocumentaryConfigModel, DocumentaryStatusModel?) -> Void)? = nil) {
+        pendingDocumentaryConfig = completion
+        sendJSON(["type": "documentary_config"])
+    }
+
+    func updateDocumentaryConfig(
+        enabled: Bool? = nil,
+        publishingMode: String? = nil,
+        qualityThreshold: Int? = nil,
+        pipelineBudgetUsd: Double? = nil,
+        completion: ((DocumentaryConfigModel, DocumentaryStatusModel?) -> Void)? = nil
+    ) {
+        pendingDocumentaryConfig = completion
+        var payload: [String: Any] = [:]
+        if let enabled { payload["enabled"] = enabled }
+        if let publishingMode { payload["publishingMode"] = publishingMode }
+        if let qualityThreshold { payload["qualityThreshold"] = qualityThreshold }
+        if let pipelineBudgetUsd { payload["pipelineBudgetUsd"] = pipelineBudgetUsd }
+        sendJSON([
+            "type": "documentary_config_update",
+            "payload": payload,
+        ])
+    }
+
+    func triggerDocumentaryRun(force: Bool = false) {
+        sendJSON([
+            "type": "documentary_run",
+            "payload": ["force": force],
+        ])
+    }
+
+    func updateAttentionConfig(
+        youtubeApiKey: String? = nil,
+        youtubeTrendQuery: String? = nil,
+        youtubeRefreshToken: String? = nil,
+        xBearerToken: String? = nil,
+        xTrendQuery: String? = nil,
+        completion: ((AttentionConfigModel) -> Void)? = nil
+    ) {
+        pendingAttentionConfig = completion
+        var payload: [String: Any] = [:]
+        if let youtubeTrendQuery {
+            payload["youtubeTrendQuery"] = youtubeTrendQuery
+        }
+        if let youtubeApiKey {
+            payload["youtubeApiKey"] = youtubeApiKey
+        }
+        if let youtubeRefreshToken {
+            payload["youtubeRefreshToken"] = youtubeRefreshToken
+        }
+        if let xBearerToken {
+            payload["xBearerToken"] = xBearerToken
+        }
+        if let xTrendQuery {
+            payload["xTrendQuery"] = xTrendQuery
+        }
+        sendJSON([
+            "type": "attention_config_update",
+            "payload": payload,
         ])
     }
 
@@ -172,7 +267,15 @@ final class DaemonClient: @unchecked Sendable {
             case .failure(let error):
                 print("[DaemonClient] receive error: \(error)")
                 self.setConnected(false)
-                DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+                self.setReconnecting(true)
+                // Robust reconnect with backoff (Premium & Go hardening)
+                let baseDelay: TimeInterval = 1.5
+                let maxDelay: TimeInterval = 15.0
+                let jitter = Double.random(in: 0...0.5)
+                let delay = min(maxDelay, baseDelay * pow(1.6, Double(min(5, self.reconnectAttempt))))
+                self.reconnectAttempt += 1
+                DispatchQueue.global().asyncAfter(deadline: .now() + delay + jitter) {
+                    print("[DaemonClient] attempting reconnect (attempt \(self.reconnectAttempt))")
                     self.connect()
                 }
             }
@@ -222,6 +325,23 @@ final class DaemonClient: @unchecked Sendable {
                 self.pendingVaultSearch?(memories)
                 self.pendingVaultSearch = nil
             }
+        case "memories_read":
+            let markdown = json["markdown"] as? String ?? ""
+            DispatchQueue.main.async {
+                self.pendingMemoriesRead?(markdown)
+                self.pendingMemoriesRead = nil
+            }
+        case "dreaming_status":
+            if let status = decodeDreamingStatus(json["status"]) {
+                DispatchQueue.main.async {
+                    self.pendingDreamingStatus?(status)
+                    self.pendingDreamingStatus = nil
+                }
+            }
+        case "attention_scan":
+            // Fire-and-forget for now. In a fuller UI we would surface a live "Attention Cortex running" banner
+            // and route the emitted attention.* / trend.* events into the Mission Control comms feed (they already flow as normal events).
+            print("[DaemonClient] attention_scan reply:", json["status"] as? String ?? "ok")
         case "runtime_settings":
             if let settings = decodeRuntimeSettings(json["settings"]) {
                 DispatchQueue.main.async {
@@ -229,6 +349,23 @@ final class DaemonClient: @unchecked Sendable {
                     self.pendingRuntimeSettings = nil
                 }
             }
+        case "attention_config":
+            if let config = decodeAttentionConfig(json["config"]) {
+                DispatchQueue.main.async {
+                    self.pendingAttentionConfig?(config)
+                    self.pendingAttentionConfig = nil
+                }
+            }
+        case "documentary_config":
+            if let config = decodeDocumentaryConfig(json["config"]) {
+                let status = decodeDocumentaryStatus(json["status"])
+                DispatchQueue.main.async {
+                    self.pendingDocumentaryConfig?(config, status)
+                    self.pendingDocumentaryConfig = nil
+                }
+            }
+        case "documentary_run":
+            print("[DaemonClient] documentary_run reply:", json["status"] as? String ?? "ok")
         case "event":
             if let eventData = try? JSONSerialization.data(withJSONObject: json["message"] ?? [:]),
                let streamMessage = try? JSONDecoder().decode(EventStreamMessage.self, from: eventData) {
@@ -336,11 +473,67 @@ final class DaemonClient: @unchecked Sendable {
         return settings
     }
 
+    private func decodeAttentionConfig(_ value: Any?) -> AttentionConfigModel? {
+        guard let dict = value,
+              let data = try? JSONSerialization.data(withJSONObject: dict),
+              let config = try? JSONDecoder().decode(AttentionConfigModel.self, from: data) else {
+            return nil
+        }
+        return config
+    }
+
+    private func decodeDocumentaryConfig(_ value: Any?) -> DocumentaryConfigModel? {
+        guard let dict = value,
+              let data = try? JSONSerialization.data(withJSONObject: dict),
+              let config = try? JSONDecoder().decode(DocumentaryConfigModel.self, from: data) else {
+            return nil
+        }
+        return config
+    }
+
+    private func decodeDocumentaryStatus(_ value: Any?) -> DocumentaryStatusModel? {
+        guard let dict = value,
+              let data = try? JSONSerialization.data(withJSONObject: dict),
+              let status = try? JSONDecoder().decode(DocumentaryStatusModel.self, from: data) else {
+            return nil
+        }
+        return status
+    }
+
+    private func decodeDreamingStatus(_ value: Any?) -> DreamingStatusModel? {
+        guard let dict = value,
+              let data = try? JSONSerialization.data(withJSONObject: dict),
+              let status = try? JSONDecoder().decode(DreamingStatusModel.self, from: data) else {
+            return nil
+        }
+        return status
+    }
+
     private func setConnected(_ connected: Bool) {
         guard connected != isConnected else { return }
         isConnected = connected
         DispatchQueue.main.async {
             self.onConnectionChange?(connected)
         }
+        if connected {
+            reconnectAttempt = 0
+            setReconnecting(false)
+        }
+    }
+
+    private func setReconnecting(_ reconnecting: Bool) {
+        guard reconnecting != isReconnecting else { return }
+        isReconnecting = reconnecting
+        DispatchQueue.main.async {
+            self.onReconnectingChange?(reconnecting)
+        }
+    }
+
+    func forceReconnect() {
+        webSocketTask?.cancel(with: .goingAway, reason: nil)
+        isConnected = false
+        reconnectAttempt = 0
+        setReconnecting(true)
+        connect()
     }
 }

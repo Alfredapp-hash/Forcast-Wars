@@ -4,6 +4,7 @@ node_modules/
 
 # Build
 dist/
+.next/
 *.tsbuildinfo
 .turbo/
 
@@ -32,6 +33,7 @@ logs/
 *.db
 *.db-shm
 *.db-wal
+apps/local-daemon/~/
 
 # IDE
 .idea/

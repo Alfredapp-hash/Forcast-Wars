@@ -2,14 +2,17 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct MemoryView: View {
+    @Environment(AppState.self) private var appState
     let daemonClient: DaemonClient
 
     @State private var query = ""
     @State private var results: [ArkheEvent] = []
     @State private var vaultResults: [VaultMemoryRecord] = []
+    @State private var humanMemoryText = ""
     @State private var isSearching = false
     @State private var exportMessage: String?
     @State private var searchMode: MemorySearchMode = .local
+    @State private var dreamStatus: DreamingStatusModel?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -20,16 +23,23 @@ struct MemoryView: View {
             HStack {
                 Picker("", selection: $searchMode) {
                     Text("Local Events").tag(MemorySearchMode.local)
-                    Text("Ark Vault").tag(MemorySearchMode.vault)
+                    Text("Neural").tag(MemorySearchMode.vault)
+                    Text("MEMORIES.md").tag(MemorySearchMode.human)
                 }
                 .pickerStyle(.segmented)
-                .frame(width: 220)
+                .frame(width: 300)
 
-                TextField(searchMode == .local ? "Search events…" : "Search Ark Vault…", text: $query)
-                    .textFieldStyle(.roundedBorder)
-                    .onSubmit { search() }
-                Button("Search") { search() }
-                    .disabled(query.trimmingCharacters(in: .whitespaces).isEmpty)
+                if searchMode != .human {
+                    TextField(searchMode == .local ? "Search events…" : "Search activation memory…", text: $query)
+                        .textFieldStyle(.roundedBorder)
+                        .onSubmit { search() }
+                    Button("Search") { search() }
+                        .disabled(query.trimmingCharacters(in: .whitespaces).isEmpty)
+                } else {
+                    Button("Load") { loadHumanMemory() }
+                    Button("Save") { saveHumanMemory() }
+                    Button("Dream Now") { dreamNow() }
+                }
                 Button("Export Audit") { exportAudit() }
                     .buttonStyle(.bordered)
             }
@@ -45,6 +55,21 @@ struct MemoryView: View {
             if isSearching {
                 ProgressView("Searching…")
                     .padding()
+            } else if searchMode == .human {
+                VStack(alignment: .leading, spacing: 8) {
+                    if let dreamStatus {
+                        Text(dreamStatus.lastReflection ?? "Dreaming service ready. \(dreamStatus.eventCount) recent events available.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal)
+                    }
+                    TextEditor(text: $humanMemoryText)
+                        .font(.system(.body, design: .monospaced))
+                        .padding(8)
+                        .background(.quaternary.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal)
+                }
             } else if searchMode == .local && results.isEmpty {
                 ContentUnavailableView(
                     "Search local memory",
@@ -59,25 +84,30 @@ struct MemoryView: View {
                 )
             } else if searchMode == .local {
                 List(results) { event in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(event.eventType)
-                                .font(.caption.monospaced())
-                            Spacer()
-                            Text(String(event.ts.prefix(19)))
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
+                    Button {
+                        appState.presentForensics(focusEvent: event, allEvents: results)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(event.eventType)
+                                    .font(.caption.monospaced())
+                                Spacer()
+                                Text(String(event.ts.prefix(19)))
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(memorySummary(event))
+                                .font(.subheadline)
+                                .lineLimit(2)
+                            if let missionId = event.missionId {
+                                Text(missionId)
+                                    .font(.caption2.monospaced())
+                                    .foregroundStyle(.tertiary)
+                            }
                         }
-                        Text(memorySummary(event))
-                            .font(.subheadline)
-                            .lineLimit(2)
-                        if let missionId = event.missionId {
-                            Text(missionId)
-                                .font(.caption2.monospaced())
-                                .foregroundStyle(.tertiary)
-                        }
+                        .padding(.vertical, 2)
                     }
-                    .padding(.vertical, 2)
+                    .buttonStyle(.plain)
                 }
             } else {
                 List(vaultResults) { memory in
@@ -89,6 +119,17 @@ struct MemoryView: View {
                             Text(String(memory.createdAt.prefix(19)))
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
+                        }
+                        HStack(spacing: 8) {
+                            if let score = memory.activationScore {
+                                ScoreBadge(label: "activation", value: score)
+                            }
+                            if let importance = memory.importance {
+                                ScoreBadge(label: "importance", value: importance)
+                            }
+                            if let similarity = memory.similarity {
+                                ScoreBadge(label: "similarity", value: similarity)
+                            }
                         }
                         Text(memory.content)
                             .font(.subheadline)
@@ -107,6 +148,9 @@ struct MemoryView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onAppear {
+            loadHumanMemory()
+        }
     }
 
     private func search() {
@@ -130,6 +174,28 @@ struct MemoryView: View {
         exportMessage = "Exporting…"
         daemonClient.exportAudit { events in
             saveAudit(events)
+        }
+    }
+
+    private func loadHumanMemory() {
+        daemonClient.readHumanMemories { markdown in
+            humanMemoryText = markdown
+        }
+    }
+
+    private func saveHumanMemory() {
+        daemonClient.writeHumanMemories(markdown: humanMemoryText) { markdown in
+            humanMemoryText = markdown
+            exportMessage = "Saved MEMORIES.md"
+        }
+    }
+
+    private func dreamNow() {
+        isSearching = true
+        daemonClient.dreamNow { status in
+            dreamStatus = status
+            isSearching = false
+            loadHumanMemory()
         }
     }
 
@@ -173,4 +239,19 @@ struct MemoryView: View {
 enum MemorySearchMode {
     case local
     case vault
+    case human
+}
+
+struct ScoreBadge: View {
+    let label: String
+    let value: Double
+
+    var body: some View {
+        Text("\(label): \(Int(value * 100))")
+            .font(.caption2.monospaced())
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(.blue.opacity(0.12))
+            .clipShape(Capsule())
+    }
 }

@@ -69,6 +69,20 @@ struct EventPayload: Codable, Sendable {
     let action: String?
     let approvalId: String?
 
+    // Attention Cortex (media, trends, opportunities, video, analytics, dreams)
+    let topic: String?
+    let opportunityScore: Double?
+    let velocity: Int?
+    let searchGrowthPct: Double?
+    let competitionScore: Double?
+    let views: Int?
+    let ctr: Double?
+    let watchTimeAvgSec: Double?
+    let retentionPct: Double?
+    let videoProvider: String?
+    let platform: String?
+    let assetType: String?
+
     // Generic
     let error: String?
 
@@ -132,4 +146,13 @@ struct EventLogRow: Identifiable, Sendable {
     let eventType: String
     let summary: String
     let status: String
+}
+
+/// Richer model for the dedicated Attention Cortex live strip in Mission Control.
+struct AttentionSignal: Identifiable, Sendable {
+    let id: String
+    let ts: String
+    let eventType: String
+    let summary: String
+    let score: Double?
 }

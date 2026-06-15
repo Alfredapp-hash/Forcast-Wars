@@ -269,7 +269,7 @@ export class Director {
   }
 }
 
-export type MissionTemplate = "audit" | "competitor_research" | "proposal" | "generic";
+export type MissionTemplate = "audit" | "competitor_research" | "proposal" | "debate" | "generic";
 
 function parseIntent(utterance: string, routedIntent = ""): {
   title: string;
@@ -298,6 +298,13 @@ function parseIntent(utterance: string, routedIntent = ""): {
       title: "Proposal Generation",
       objective: utterance,
       template: "proposal",
+    };
+  }
+  if (lower.includes("debate") || lower.includes("prediction") || lower.includes("forecast")) {
+    return {
+      title: "Forecast Wars Debate",
+      objective: utterance,
+      template: "debate",
     };
   }
   if (lower.includes("mission") || lower.includes("director")) {
@@ -445,6 +452,22 @@ function planAgents(template: MissionTemplate, registry: AgentRegistry) {
         addWork("Marketing Agent", "Polish the proposal for brand voice.", [report]);
       }
       break;
+    case "debate":
+      add("Affirmative Agent", ["debate.argue", "evidence.cite"], 3.0);
+      add("Negative Agent", ["debate.argue", "evidence.cite"], 3.0);
+      add("Fact-Check Agent", ["evidence.verify", "claim.flag"], 1.5);
+      add("Judge Agent", ["debate.score", "debate.ruling"], 2.5);
+      add("Narrator Agent", ["content.write", "content.summarize"], 1.0);
+      {
+        const openingYes = addWork("Affirmative Agent", "Generate opening argument for YES position.");
+        const openingNo = addWork("Negative Agent", "Generate opening argument for NO position.");
+        const factCheck = addWork("Fact-Check Agent", "Verify factual claims from both openings.", [openingYes, openingNo]);
+        const judge = addWork("Judge Agent", "Score debate quality and identify winning side.", [factCheck]);
+        const rebuttalYes = addWork("Affirmative Agent", "Generate rebuttal to NO arguments.", [judge]);
+        const rebuttalNo = addWork("Negative Agent", "Generate rebuttal to YES arguments.", [judge]);
+        addWork("Narrator Agent", "Write public summary and queue content jobs.", [rebuttalYes, rebuttalNo]);
+      }
+      break;
     default:
       add("General Agent", ["search", "summarize"]);
       addWork("General Agent", "Complete the requested mission and report back.");
@@ -455,6 +478,6 @@ function planAgents(template: MissionTemplate, registry: AgentRegistry) {
     agents,
     workItems,
     budgetUsd: missionBudgetUsd(agents.length),
-    riskScore: template === "competitor_research" ? 18 : 10,
+    riskScore: template === "competitor_research" ? 18 : template === "debate" ? 14 : 10,
   };
 }

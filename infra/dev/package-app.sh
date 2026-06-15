@@ -53,4 +53,6 @@ rm -f "$DMG"
 hdiutil create -volname "Arkhe AgentOS" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
 
 echo "Created $DMG"
-echo "For notarization: codesign + xcrun notarytool submit (see docs/release/PACKAGING.md)"
+echo "For notarization (manual or scripted):"
+echo "  bash infra/dev/notarize.sh \"$DMG\" \"Developer ID Application: <Your Name (TEAMID)>\" <keychain-profile>"
+echo "See docs/release/PACKAGING.md and the notarize.sh script for automated flow."

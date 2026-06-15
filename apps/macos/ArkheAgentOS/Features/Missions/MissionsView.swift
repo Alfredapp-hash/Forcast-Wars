@@ -12,11 +12,12 @@ struct MissionsView: View {
                 .padding(.horizontal)
 
             if history.missions.isEmpty {
-                ContentUnavailableView(
-                    "No missions yet",
+                EmptyStateView(
+                    title: "No missions yet",
                     systemImage: "flag.checkered",
-                    description: Text("Launch a mission from Mission Control or the voice bar.")
+                    description: "Launch a mission from Mission Control or the voice bar."
                 )
+                .padding(.horizontal)
             } else {
                 List(history.missions) { mission in
                     HStack {

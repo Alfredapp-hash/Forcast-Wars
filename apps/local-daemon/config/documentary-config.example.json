@@ -1,0 +1,42 @@
+{
+  "enabled": false,
+  "channelName": "Self-Documentary",
+  "series": [
+    "What I Learned Today",
+    "Inside My DNA",
+    "New Gene Added",
+    "Mission Postmortem",
+    "Financial Pulse"
+  ],
+  "missionStatement": "Document Arkhe AgentOS development toward financial independence — real experiments, measurable results, and honest failures. No generic AI slop.",
+  "beliefs": [
+    "Transparency builds trust",
+    "Show the work, not just the outcome",
+    "Financial sustainability before scale",
+    "Sanitize secrets and PII before any capture"
+  ],
+  "prohibitedTopics": [
+    "API keys and credentials",
+    "Private user prompts and vault contents",
+    "PII and client data",
+    "Unverified financial claims",
+    "Political advocacy"
+  ],
+  "publishingMode": "shadow",
+  "qualityThreshold": 72,
+  "requiredQualityGates": [
+    "original_experiment",
+    "milestone",
+    "analysis",
+    "measurable_result",
+    "demo",
+    "mission_position"
+  ],
+  "pipelineBudgetUsd": 8,
+  "monthlyOperatingBudgetUsd": 120,
+  "requirePublishApproval": true,
+  "requireCompliancePass": true,
+  "targetDurationSecMin": 60,
+  "targetDurationSecMax": 120,
+  "syntheticMediaDisclosure": true
+}

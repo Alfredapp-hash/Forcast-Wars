@@ -1,57 +1,61 @@
 import SwiftUI
 
+/// Bottom command bar — primary text input on every tab (voice optional).
 struct VoiceBar: View {
+    @Environment(AppState.self) private var appState
     let daemonClient: DaemonClient
+    @FocusState private var commandFocused: Bool
     @StateObject private var speech = SpeechRecognizer()
     @State private var state: VoiceBarState = .dormant
     @State private var commandText = ""
 
     var body: some View {
         HStack(spacing: 12) {
+            Text("Director")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 52, alignment: .leading)
+
+            TextField("Type a command — e.g. audit my website at arkhe.com", text: $commandText)
+                .textFieldStyle(.roundedBorder)
+                .focused($commandFocused)
+                .onSubmit { sendCommand(source: "ui") }
+
+            Button("Send") { sendCommand(source: "ui") }
+                .keyboardShortcut(.return, modifiers: .command)
+                .disabled(!canSend)
+
             Button {
                 toggleListening()
             } label: {
                 Image(systemName: state == .listening ? "mic.fill" : "mic")
-                    .font(.title3)
-                    .foregroundStyle(state == .listening ? .red : .primary)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .help(state == .listening ? "Stop listening" : "Voice input")
+            .disabled(state == .processing)
 
             if state == .listening {
                 Text(speech.transcript.isEmpty ? "Listening…" : speech.transcript)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
-                    .lineLimit(2)
-            } else if state == .dormant {
-                Text("Hold mic for voice, or type a Director command")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .frame(maxWidth: 140, alignment: .leading)
             } else if state == .processing {
-                ProgressView()
-                    .controlSize(.small)
-                Text("Planning mission…")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-
-            TextField("Director command…", text: $commandText)
-                .textFieldStyle(.roundedBorder)
-                .onSubmit { sendCommand(source: "ui") }
-
-            if state != .processing {
-                Button("Send") { sendCommand(source: "ui") }
-                    .disabled(commandText.trimmingCharacters(in: .whitespaces).isEmpty && state == .dormant)
+                ProgressView().controlSize(.small)
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(.ultraThinMaterial)
-        .clipShape(Capsule())
-        .shadow(radius: 4, y: 2)
-        .frame(maxWidth: 680)
-        .onAppear {
-            speech.requestAuthorization()
+        .background(.bar)
+        .overlay(alignment: .top) { Divider() }
+        .onAppear { speech.requestAuthorization() }
+        .onChange(of: appState.commandBarFocusToken) { _, _ in
+            commandFocused = true
         }
+    }
+
+    private var canSend: Bool {
+        state != .processing && !commandText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private func toggleListening() {

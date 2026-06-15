@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AgentsView: View {
+    @Environment(AppState.self) private var appState
     let daemonClient: DaemonClient
 
     @State private var snapshot: RuntimeSnapshot?
@@ -102,6 +103,18 @@ struct AgentsView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                    }
+                }
+
+                Divider()
+                HStack {
+                    if let missionId = agent.missionId {
+                        Button("Replay mission") {
+                            appState.openReplay(missionId: missionId)
+                        }
+                    }
+                    Button("Agent forensics") {
+                        appState.openForensicsForAgent(agentId: agent.id, missionId: agent.missionId)
                     }
                 }
             }

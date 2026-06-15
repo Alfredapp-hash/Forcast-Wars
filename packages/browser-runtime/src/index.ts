@@ -80,6 +80,17 @@ export class BrowserRuntime {
     return { url: safeUrl, title, textPreview, screenshotRef, traceRef, domSnapshotRef, events };
   }
 
+  /** Lightweight probe for health checks — launches Chromium briefly. Cached by caller. */
+  async probe(): Promise<boolean> {
+    try {
+      const browser = await chromium.launch({ headless: true });
+      await browser.close();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async shutdown(): Promise<void> {
     await this.browser?.close();
     this.browser = null;

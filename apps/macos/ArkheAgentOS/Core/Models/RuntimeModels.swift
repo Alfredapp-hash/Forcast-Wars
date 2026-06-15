@@ -6,6 +6,10 @@ struct HealthStatus: Codable, Sendable {
     let ipc: String
     let eventBus: String
     let modelRouter: String
+    let ollama: String?
+    let supabase: String?
+    let playwright: String?
+    let appleFoundation: String?
     let uptimeSeconds: Int
     let eventsSeen: Int
     let clientsConnected: Int
@@ -35,6 +39,7 @@ struct RuntimeSnapshot: Codable, Sendable {
     let agents: [RuntimeAgentRecord]
     let workItems: [RuntimeWorkItemRecord]
     let experts: [ResidentExpertRecord]?
+    let neuralMesh: NeuralMeshSnapshot?
     let aiResources: [AIResourceRecord]?
 }
 
@@ -42,10 +47,39 @@ struct ResidentExpertRecord: Codable, Sendable, Identifiable {
     let id: String
     let role: String
     let specialty: String
+    let cortex: String?
+    let permanent: Bool?
     let preferredLayer: Int
     let preferredModel: String
     let status: String
     let activations: Int
+}
+
+struct NeuralMeshSnapshot: Codable, Sendable {
+    let synapses: [AgentSynapseRecord]
+    let proposedExperts: [ProposedExpertRecord]
+}
+
+struct AgentSynapseRecord: Codable, Sendable, Identifiable {
+    let id: String
+    let sourceAgentId: String
+    let targetAgentId: String
+    let sourceRole: String
+    let targetRole: String
+    let weight: Double
+    let messages: Int
+    let successes: Int
+    let failures: Int
+    let trusted: Bool
+}
+
+struct ProposedExpertRecord: Codable, Sendable, Identifiable {
+    let role: String
+    let sourceRoles: [String]
+    let confidence: Double
+    let reason: String
+
+    var id: String { role }
 }
 
 struct AIResourceRecord: Codable, Sendable, Identifiable {
@@ -96,7 +130,14 @@ struct VaultMemoryRecord: Codable, Sendable, Identifiable {
     let missionId: String?
     let memoryType: String
     let content: String
+    let importance: Double?
+    let contextTags: [String]?
+    let accessCount: Int?
+    let lastAccessedAt: String?
     let createdAt: String
+    let similarity: Double?
+    let recencyScore: Double?
+    let activationScore: Double?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -104,7 +145,14 @@ struct VaultMemoryRecord: Codable, Sendable, Identifiable {
         case missionId = "mission_id"
         case memoryType = "memory_type"
         case content
+        case importance
+        case contextTags = "context_tags"
+        case accessCount = "access_count"
+        case lastAccessedAt = "last_accessed_at"
         case createdAt = "created_at"
+        case similarity
+        case recencyScore = "recency_score"
+        case activationScore = "activation_score"
     }
 }
 
@@ -112,6 +160,63 @@ struct RuntimeSettingsModel: Codable, Sendable {
     let defaultBudgetUsd: Double
     let paidCloudEnabled: Bool
     let maxMissionBudgetUsd: Double
+}
+
+struct AttentionConfigModel: Codable, Sendable {
+    let youtubeApiKeyConfigured: Bool
+    let youtubeApiKeyMasked: String?
+    let youtubeTrendQuery: String
+    let youtubeRefreshTokenConfigured: Bool
+    let youtubeRefreshTokenMasked: String?
+    let lastPollAt: String?
+    let lastPollOk: Bool?
+    let xBearerTokenConfigured: Bool
+    let xBearerTokenMasked: String?
+    let xTrendQuery: String
+    let xLastPollAt: String?
+    let xLastPollOk: Bool?
+}
+
+struct DreamingStatusModel: Codable, Sendable {
+    let enabled: Bool
+    let lastRunAt: String?
+    let lastReflection: String?
+    let eventCount: Int
+}
+
+struct DocumentaryConfigModel: Codable, Sendable {
+    let enabled: Bool
+    let channelName: String
+    let publishingMode: String
+    let qualityThreshold: Int
+    let pipelineBudgetUsd: Double
+    let lastPipelineRunAt: String?
+    let lastPipelineStatus: String
+    let lastPipelineStage: String?
+}
+
+struct DocumentarySustainabilityModel: Codable, Sendable {
+    let readinessScore: Int
+    let consecutiveSustainableMonths: Int
+    let requiredConsecutiveMonths: Int
+    let reserveMonthsCovered: Double
+    let requiredReserveMonths: Int
+    let autonomousPublishReady: Bool
+    let summary: String
+}
+
+struct DocumentaryStatusModel: Codable, Sendable {
+    let run: DocumentaryRunModel?
+    let sustainability: DocumentarySustainabilityModel
+}
+
+struct DocumentaryRunModel: Codable, Sendable {
+    let id: String
+    let startedAt: String
+    let completedAt: String?
+    let status: String
+    let currentStage: String?
+    let publishMode: String
 }
 
 struct MissionHistoryEntry: Identifiable, Sendable {
@@ -127,6 +232,8 @@ struct MissionHistoryEntry: Identifiable, Sendable {
 @Observable
 final class MissionHistoryStore {
     var missions: [MissionHistoryEntry] = []
+
+    private let maxMissions = 200
 
     func ingest(_ event: ArkheEvent) {
         guard let missionId = event.missionId else { return }
@@ -180,6 +287,13 @@ final class MissionHistoryStore {
             if let idx = missions.firstIndex(where: { $0.id == missionId }) {
                 missions[idx].eventCount += 1
             }
+        }
+        trimIfNeeded()
+    }
+
+    private func trimIfNeeded() {
+        if missions.count > maxMissions {
+            missions.removeLast(missions.count - maxMissions)
         }
     }
 }
