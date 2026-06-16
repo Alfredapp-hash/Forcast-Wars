@@ -2,10 +2,10 @@
   "name": "arkhe-agentos",
   "version": "0.1.0",
   "private": true,
-  "description": "The first native macOS Agent Operating System",
+  "description": "Forecast Wars — public AI debate arena, powered by Arkhe AgentOS",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev --filter=@arkhe/forecast-wars",
     "dev:daemon": "turbo run dev --filter=@arkhe/local-daemon",
     "dev:hermes": "turbo run dev --filter=@arkhe/hermes",
     "dev:forecast-wars": "turbo run dev --filter=@arkhe/forecast-wars",
